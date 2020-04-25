@@ -16,6 +16,7 @@ dependencies:
   firebase_auth: 0.16.0
   firebase_messaging: 6.0.13
   cloud_firestore: ^0.13.5
+  firebase_storage: ^3.1.5
   intl: ^0.16.1
   http:
   uuid: ^2.0.4
@@ -24,6 +25,9 @@ dependencies:
   page_transition: ^1.1.5
   google_fonts: ^1.0.0
   cached_network_image: ^2.1.0+1
+  stellarplugin: ^0.0.3+12
+  mobmongo: ^0.0.8+1
+  mime_type: ^0.3.0
   #  service_worker: 0.2.4
   #  cloud_firestore: ^0.13.5
 
