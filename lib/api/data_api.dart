@@ -7,7 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:stellar_anchor_library/models/stokvel.dart';
 import 'package:stellar_anchor_library/util/functions.dart';
 import 'package:stellar_anchor_library/util/prefs.dart';
-import 'package:stellarplugin/stellarplugin.dart';mport 'package:uuid/uuid.dart';
+import 'package:stellarplugin/stellarplugin.dart';
+import 'package:uuid/uuid.dart';
 
 import 'db.dart';
 import 'list_api.dart';
@@ -159,7 +160,8 @@ class DataAPI {
     return goal;
   }
 
-  static Future<StokvelGoal> addStokvelGoalUrl({String stokvelGoalId, String url}) async {
+  static Future<StokvelGoal> addStokvelGoalUrl(
+      {String stokvelGoalId, String url}) async {
     assert(stokvelGoalId != null);
     assert(url != null);
     var goal = await ListAPI.getStokvelGoalById(stokvelGoalId);

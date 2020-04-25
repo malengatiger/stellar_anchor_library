@@ -8,11 +8,11 @@ import 'package:stellar_anchor_library/models/stokvel.dart';
 import 'package:stellar_anchor_library/util/functions.dart';
 import 'package:stellar_anchor_library/util/prefs.dart';
 import 'package:stellarplugin/data_models/account_response_bag.dart';
-import 'package:stellarplugin/stellarplugin.dart';mport 'package:uuid/uuid.dart';
+import 'package:stellarplugin/stellarplugin.dart';
+import 'package:uuid/uuid.dart';
 
 import 'db.dart';
 import 'list_api.dart';
-
 
 MakerBloc makerBloc = MakerBloc();
 
@@ -176,7 +176,8 @@ class MakerBloc {
 
   static const String em1 = '🔆', em2 = '🔵 🔵 🔵';
   static const chacha20 = "ChaCha20/12";
-  Future createNewStokvelAndAdmin(Member member, Stokvel stokvel, String password) async {
+  Future createNewStokvelAndAdmin(
+      Member member, Stokvel stokvel, String password) async {
     var stokvelAccount = await Stellar.createAccount(isDevelopmentStatus: true);
     stokvel.accountId = stokvelAccount.accountResponse.accountId;
     prettyPrint(
@@ -190,10 +191,13 @@ class MakerBloc {
     var token = await firebaseMessaging.getToken();
     member.fcmToken = token;
 
-    var authResult = await auth.createUserWithEmailAndPassword(email: member.email, password: password);
+    var authResult = await auth.createUserWithEmailAndPassword(
+        email: member.email, password: password);
     member.memberId = authResult.user.uid;
-    authResult = await auth.signInWithEmailAndPassword(email: member.email, password: password);
-    print('🍏 🍏 User created and signed on Firebase: ${authResult.user.uid} 🍏 🍏 🍏 🍏 🍏 🍏 ');
+    authResult = await auth.signInWithEmailAndPassword(
+        email: member.email, password: password);
+    print(
+        '🍏 🍏 User created and signed on Firebase: ${authResult.user.uid} 🍏 🍏 🍏 🍏 🍏 🍏 ');
     prettyPrint(memberAccount.toJson(),
         '🔑 🔑 🔑 Member Account from Stellar 🔑 🔑 🔑');
     print('🍏 🍏 ACCOUNTS from Stellar seem OK 🍏 🍏 🍏 🍏 🍏 🍏 ');
@@ -270,7 +274,6 @@ class MakerBloc {
 
   Future createNewStokvelWithExistingMember(
       Member member, Stokvel stokvel) async {
-
     var uuid = Uuid();
     stokvel.stokvelId = uuid.v4();
     member.stokvelIds.add(stokvel.stokvelId);
@@ -304,7 +307,6 @@ class MakerBloc {
 //        seed: ee);
 //
 //    await _saveStokvelData(stokvelCredential, stokvel, stokvelAccount, member);
-
   }
 
   Future _saveStokvelData(StokkieCredential stokvelCredential, Stokvel stokvel,
@@ -349,7 +351,7 @@ class MakerBloc {
 //    var lightCrypt = LightCrypt(fortunaKey, chacha20);
 //    var chaDecrypted = lightCrypt.decrypt(encryptedSeed, cryptKey);
 //    return chaDecrypted;
-  return null;
+    return null;
   }
 
   Future<String> getDecryptedSeedFromCache() async {
@@ -367,7 +369,7 @@ class MakerBloc {
 //    } else {
 //      throw Exception('No credential on file');
 //    }
-  return null;
+    return null;
   }
 
   String getDecryptedSeed(StokkieCredential cred) {

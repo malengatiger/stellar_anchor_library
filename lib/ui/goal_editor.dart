@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_pickry/bloc/generic_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:stellar_anchor_library/api/cloud_storage.dart';
+import 'package:stellar_anchor_library/bloc/generic_bloc.dart';
 import 'package:stellar_anchor_library/models/stokvel.dart';
 import 'package:stellar_anchor_library/ui/picture_grid.dart';
 import 'package:stellar_anchor_library/util/functions.dart';
