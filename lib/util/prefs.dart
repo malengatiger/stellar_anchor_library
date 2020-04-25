@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stellar_anchor_library/models/anchor.dart';
+import 'package:stellar_anchor_library/models/stokvel.dart';
+import 'package:stellarplugin/data_models/account_response_bag.dart';
 
 class Prefs {
   static Future saveAnchor(Anchor anchor) async {
@@ -65,5 +67,68 @@ class Prefs {
     print(
         "🌽 🌽 🌽 Prefs.getAnchorUser 🧩 ......  ${name.firstName} retrieved");
     return name;
+  }
+
+  static Future saveMember(Member member) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Map jsonx = member.toJson();
+    var jx = json.encode(jsonx);
+    prefs.setString('member', jx);
+    print("🌽 🌽 🌽 Prefs.saveMember  SAVED: 🌽 ${member.toJson()}");
+    return null;
+  }
+
+  static Future<Member> getMember() async {
+    var prefs = await SharedPreferences.getInstance();
+    var string = prefs.getString('member');
+    if (string == null) {
+      return null;
+    }
+    var jx = json.decode(string);
+    var member = new Member.fromJson(jx);
+    return member;
+  }
+
+  static void addStokvelAccountResponseBag(AccountResponseBag bag) async {
+    final preferences = await SharedPreferences.getInstance();
+
+    await preferences.setString('stokvelaccount', jsonEncode(bag.toJson()));
+    print(
+        '🔵 🔵 🔵 Prefs: Stellar Stokvel AccountResponseBag cached ... 🍎 🍎 ');
+  }
+
+  static Future<AccountResponseBag> getStokvelAccountResponseBag() async {
+    final preferences = await SharedPreferences.getInstance();
+    var b = preferences.getString('stokvelaccount');
+    if (b == null) {
+      return null;
+    } else {
+      var mJson = jsonDecode(b);
+      var creds = AccountResponseBag.fromJson(mJson);
+      print('🔵 🔵 🔵 Prefs: Stokvel AccountResponseBag retrieved, 🍏 🍏 ');
+      return creds;
+    }
+  }
+
+  static void addMemberAccountResponseBag(AccountResponseBag bag) async {
+    final preferences = await SharedPreferences.getInstance();
+
+    await preferences.setString('memberaccount', jsonEncode(bag.toJson()));
+    print(
+        '🔵 🔵 🔵 Prefs: Stellar Member AccountResponseBag cached ... 🍎 🍎 ');
+  }
+
+  static Future<AccountResponseBag> getMemberAccountResponseBag() async {
+    final preferences = await SharedPreferences.getInstance();
+    var b = preferences.getString('memberaccount');
+    if (b == null) {
+      return null;
+    } else {
+      var mJson = jsonDecode(b);
+      var creds = AccountResponseBag.fromJson(mJson);
+      print('🔵 🔵 🔵 Prefs: Member AccountResponseBag retrieved, 🍏 🍏 ');
+      return creds;
+    }
   }
 }
