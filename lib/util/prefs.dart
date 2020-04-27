@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stellar_anchor_library/models/agent.dart';
 import 'package:stellar_anchor_library/models/anchor.dart';
 import 'package:stellar_anchor_library/models/stokvel.dart';
+import 'package:stellar_anchor_library/util/util.dart';
 import 'package:stellarplugin/data_models/account_response_bag.dart';
 
 class Prefs {
@@ -24,6 +26,17 @@ class Prefs {
     prefs.setString('anchorUser', jx);
     print(
         "🌽 🌽 🌽 Prefs. ANCHOR USER  SAVED: 💦  ...... ${user.firstName} 💦 ");
+    return null;
+  }
+
+  static Future saveAgent(Agent agent) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Map mJson = agent.toJson();
+    var jx = json.encode(mJson);
+    prefs.setString('agent', jx);
+    print(
+        "🌽 🌽 🌽 Prefs. AGENT SAVED: 💦  ...... ${agent.personalKYCFields.getFullName()} 💦 ");
     return null;
   }
 
@@ -53,6 +66,21 @@ class Prefs {
     var jx = json.decode(string);
     var name = new Anchor.fromJson(jx);
     print("🌽 🌽 🌽 Prefs.getAnchor 🧩 ......  ${name.name} retrieved");
+    return name;
+  }
+
+  static Future<Agent> getAgent() async {
+    p('getting cached agent ....');
+    var prefs = await SharedPreferences.getInstance();
+    var string = prefs.getString('agent');
+    if (string == null) {
+      p('getting cached agent  😡  FAILED  😡  ....');
+      return null;
+    }
+    var jx = json.decode(string);
+    var name = new Agent.fromJson(jx);
+    print(
+        "🌽 🌽 🌽 🧡  Prefs.getAgent 🧩 ......AGENT:  ${name.personalKYCFields.getFullName()} retrieved");
     return name;
   }
 

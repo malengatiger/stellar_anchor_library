@@ -36,6 +36,7 @@ dependencies:
   autocomplete_textfield: ^1.7.3
   permission_handler: ^5.0.0+hotfix.4
   qr_flutter:
+  dots_indicator: ^1.1.0
   #  service_worker: 0.2.4
   #  cloud_firestore: ^0.13.5
 
@@ -44,5 +45,6 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+  
 
 

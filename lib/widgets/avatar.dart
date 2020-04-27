@@ -15,7 +15,6 @@ class RoundAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    p('............ avatar build ... 🔆 🔆 🔆  path: $path radius: $radius');
     assert(path != null);
     if (fromNetwork) {
       return Container(

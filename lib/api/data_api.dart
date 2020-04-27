@@ -14,7 +14,7 @@ import 'db.dart';
 import 'list_api.dart';
 import 'maker.dart';
 
-class DataAPI {
+class StokvelDataAPI {
   static var _fs = Firestore.instance;
 
   static Future sendInvitation(Invitation invitation) async {
@@ -184,7 +184,7 @@ class DataAPI {
     goal.date = DateTime.now().toUtc().toIso8601String();
     var mRes = await _fs.collection('stokvelGoals').add(goal.toJson());
     print('💊 DataAPI: StokvelGoal added to Firestore, path: ${mRes.path}');
-    await LocalDB.addStokvelGoal(goal: goal);
+    await StokvelLocalDB.addStokvelGoal(goal: goal);
     return goal;
   }
 
@@ -207,7 +207,7 @@ class DataAPI {
         if (snap.exists) {
           await tx.update(documentReference, goal.toJson());
           print('🧡 🧡 DataAPI: ... StokvelGoal updated on Firestore: ... 🍎 ');
-          await LocalDB.addStokvelGoal(goal: goal);
+          await StokvelLocalDB.addStokvelGoal(goal: goal);
         }
       });
       return null;

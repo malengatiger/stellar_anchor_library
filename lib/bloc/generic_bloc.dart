@@ -223,7 +223,7 @@ class GenericBloc {
 
   Future sendInvitationToExistingMember({Invitation invitation}) async {
     _setInvitationMessage(invitation);
-    await DataAPI.sendInvitation(invitation);
+    await StokvelDataAPI.sendInvitation(invitation);
     print(
         '💚 💚 sendInvitationToExistingMember: data will be sent via cloud message to 🍎 ${invitation.memberId}');
     return null;
@@ -267,7 +267,7 @@ class GenericBloc {
   }
 
   Future<AccountResponse> getStokvelAccount(String stokvelId) async {
-    var accountResponses = await LocalDB.getStokvelAccountResponses();
+    var accountResponses = await StokvelLocalDB.getStokvelAccountResponses();
     if (accountResponses.isNotEmpty) {
       _stokkieAccountResponses.add(accountResponses.first);
       _stokkieAccountResponseController.sink.add(_stokkieAccountResponses);
@@ -278,7 +278,7 @@ class GenericBloc {
   }
 
   Future<AccountResponse> getMemberAccount(String memberId) async {
-    var accountResponses = await LocalDB.getMemberAccountResponses();
+    var accountResponses = await StokvelLocalDB.getMemberAccountResponses();
     if (accountResponses.isNotEmpty) {
       _memberAccountResponses.add(accountResponses.last);
       _memberAccountResponseController.sink.add(_memberAccountResponses);
@@ -291,10 +291,10 @@ class GenericBloc {
   Future<AccountResponse> refreshAccount(
       {String stokvelId, String memberId}) async {
     if (stokvelId != null) {
-      var cred = await LocalDB.getStokvelCredential(stokvelId);
+      var cred = await StokvelLocalDB.getStokvelCredential(stokvelId);
       if (cred == null) {
         cred = await ListAPI.getStokvelCredential(stokvelId);
-        await LocalDB.addCredential(credential: cred);
+        await StokvelLocalDB.addCredential(credential: cred);
       }
       var seed = makerBloc.getDecryptedSeed(cred);
       var accountResponse = await Stellar.getAccount(seed: seed);
@@ -303,14 +303,15 @@ class GenericBloc {
       print(
           '🍎 GenericBloc:refresh stokvel Account: 🍎 account response from 🧡 Stellar Network 🍎 '
           '# balances: ${accountResponse.balances.length}, # responses in list: ${_stokkieAccountResponses.length}');
-      await LocalDB.addStokvelAccountResponse(accountResponse: accountResponse);
+      await StokvelLocalDB.addStokvelAccountResponse(
+          accountResponse: accountResponse);
       return accountResponse;
     }
     if (memberId != null) {
-      var cred = await LocalDB.getMemberCredential(memberId);
+      var cred = await StokvelLocalDB.getMemberCredential(memberId);
       if (cred == null) {
         cred = await ListAPI.getMemberCredential(memberId);
-        await LocalDB.addCredential(credential: cred);
+        await StokvelLocalDB.addCredential(credential: cred);
       }
       var seed = makerBloc.getDecryptedSeed(cred);
       var accountResponse = await Stellar.getAccount(seed: seed);
@@ -320,14 +321,15 @@ class GenericBloc {
       print(
           '🍎 GenericBloc:refresh member Account: 🍎 account response from 🧡 Stellar Network 🍎 '
           '# balances: ${accountResponse.balances.length} # responses in list: ${_memberAccountResponses.length}');
-      await LocalDB.addMemberAccountResponse(accountResponse: accountResponse);
+      await StokvelLocalDB.addMemberAccountResponse(
+          accountResponse: accountResponse);
       return accountResponse;
     }
     return null;
   }
 
   Future<Member> getMember(String memberId) async {
-    var members = await LocalDB.getMembers();
+    var members = await StokvelLocalDB.getMembers();
     Member member;
     members.forEach((m) {
       if (m.memberId == memberId) {
@@ -345,7 +347,7 @@ class GenericBloc {
     Member member;
     member = await ListAPI.getMember(memberId);
     if (member != null) {
-      await LocalDB.addMember(member: member);
+      await StokvelLocalDB.addMember(member: member);
       _members.add(member);
       _memberController.sink.add(_members);
     }
@@ -355,7 +357,7 @@ class GenericBloc {
 
   Future<List<Member>> getStokvelMembers(String stokvelId) async {
     _members.clear();
-    _members = await LocalDB.getStokvelMembers(stokvelId);
+    _members = await StokvelLocalDB.getStokvelMembers(stokvelId);
     if (_members.isEmpty) {
       return await refreshStokvelMembers(stokvelId);
     }
@@ -372,7 +374,7 @@ class GenericBloc {
     print(
         'GenericBloc:refreshStokvelMembers: 🔵 🔵 returning members found: ${_members.length}');
     for (var member in _members) {
-      await LocalDB.addMember(member: member);
+      await StokvelLocalDB.addMember(member: member);
     }
     return _members;
   }
@@ -383,7 +385,7 @@ class GenericBloc {
   Future<Member> getCachedMember() async {
     _member = await Prefs.getMember();
     _member = await refreshMember(_member.memberId);
-    await LocalDB.addMember(member: _member);
+    await StokvelLocalDB.addMember(member: _member);
     Prefs.saveMember(_member);
     prettyPrint(_member.toJson(),
         " 🅿️ 🅿️ GenericBloc: getCachedMember, called from constructor  🅿️ 🅿️");
@@ -414,7 +416,7 @@ class GenericBloc {
   Future<StokvelGoal> addStokvelGoal(StokvelGoal goal) async {
     assert(goal != null);
     prettyPrint(goal.toJson(), '🌎 🌎 🌎 GOAL to be added to Firestore');
-    var mg = await DataAPI.addStokvelGoal(goal);
+    var mg = await StokvelDataAPI.addStokvelGoal(goal);
     _stokvelGoals.add(mg);
     _stokvelGoalController.sink.add(_stokvelGoals);
     return mg;
@@ -422,27 +424,27 @@ class GenericBloc {
 
   Future<StokvelGoal> addStokvelGoalPayment(
       String stokvelGoalId, StokvelPayment payment) async {
-    return await DataAPI.addStokvelGoalPayment(
+    return await StokvelDataAPI.addStokvelGoalPayment(
         stokvelGoalId: stokvelGoalId, payment: payment);
   }
 
   Future<StokvelGoal> addStokvelGoalUrl(
       String stokvelGoalId, String url) async {
-    StokvelGoal goal =
-        await DataAPI.addStokvelGoalUrl(stokvelGoalId: stokvelGoalId, url: url);
+    StokvelGoal goal = await StokvelDataAPI.addStokvelGoalUrl(
+        stokvelGoalId: stokvelGoalId, url: url);
     return goal;
   }
 
   Future updateStokvelGoal(StokvelGoal stokvelGoal) async {
     _stokvelGoals.remove(stokvelGoal);
-    await DataAPI.updateStokvelGoal(stokvelGoal);
+    await StokvelDataAPI.updateStokvelGoal(stokvelGoal);
     _stokvelGoals.add(stokvelGoal);
     _stokvelGoalController.sink.add(_stokvelGoals);
     return null;
   }
 
   Future<List<StokvelGoal>> getStokvelGoals(String stokvelId) async {
-    var goals = await LocalDB.getStokvelGoals(stokvelId);
+    var goals = await StokvelLocalDB.getStokvelGoals(stokvelId);
     if (goals.isEmpty) {
       return await refreshStokvelGoals(stokvelId);
     }
@@ -474,8 +476,8 @@ class GenericBloc {
       stellarHash: null,
     );
 
-    var res =
-        await DataAPI.sendStokvelPaymentToStellar(payment: payment, seed: seed);
+    var res = await StokvelDataAPI.sendStokvelPaymentToStellar(
+        payment: payment, seed: seed);
     _stokvelPayments.add(res);
     _stokvelPaymentController.add(_stokvelPayments);
 
@@ -495,8 +497,8 @@ class GenericBloc {
         amount: amount,
         paymentId: uuid.v4(),
         date: DateTime.now().toUtc().toIso8601String());
-    var res =
-        await DataAPI.sendMemberPaymentToStellar(payment: payment, seed: seed);
+    var res = await StokvelDataAPI.sendMemberPaymentToStellar(
+        payment: payment, seed: seed);
     _memberPaymentsMade.add(res);
     _memberPaymentMadeController.sink.add(_memberPaymentsMade);
 
@@ -507,7 +509,7 @@ class GenericBloc {
     if (_member == null) {
       _member = await getCachedMember();
     }
-    _stokvelPayments = await LocalDB.getStokvelPayments(stokvelId);
+    _stokvelPayments = await StokvelLocalDB.getStokvelPayments(stokvelId);
     if (_stokvelPayments.isEmpty) {
       return await refreshStokvelPayments(stokvelId);
     }
@@ -519,16 +521,16 @@ class GenericBloc {
   }
 
   Future<Stokvel> getStokvelById(String stokvelId) async {
-    var stokvel = await LocalDB.getStokvelById(stokvelId);
+    var stokvel = await StokvelLocalDB.getStokvelById(stokvelId);
     if (stokvel == null) {
       stokvel = await ListAPI.getStokvelById(stokvelId);
-      await LocalDB.addStokvel(stokvel: stokvel);
+      await StokvelLocalDB.addStokvel(stokvel: stokvel);
     }
     return stokvel;
   }
 
   Future<List<Stokvel>> getStokvels() async {
-    _stokvels = await LocalDB.getStokvels();
+    _stokvels = await StokvelLocalDB.getStokvels();
     if (_stokvels.isEmpty) {
       return await refreshStokvels();
     }
@@ -542,7 +544,7 @@ class GenericBloc {
     _stokvels = await ListAPI.getStokvels();
     _stokvelController.sink.add(_stokvels);
     for (var stokvel in _stokvels) {
-      await LocalDB.addStokvel(stokvel: stokvel);
+      await StokvelLocalDB.addStokvel(stokvel: stokvel);
     }
     print(
         'GenericBloc:  🌎 🌎 🌎 refreshStokvels: found ${_stokvels.length}  🔵 🔵 🔵 ');
@@ -556,7 +558,7 @@ class GenericBloc {
     _stokvelPayments = await ListAPI.getStokvelPayments(stokvelId);
     _stokvelPaymentController.sink.add(_stokvelPayments);
     for (var pay in _stokvelPayments) {
-      await LocalDB.addStokvelPayment(stokvelPayment: pay);
+      await StokvelLocalDB.addStokvelPayment(stokvelPayment: pay);
     }
     print(
         'GenericBloc:  🌎 🌎 🌎 refreshStokvelPayments: found ${_stokvelPayments.length}  🔵 🔵 🔵 ');
@@ -568,7 +570,7 @@ class GenericBloc {
     if (_member == null) {
       _member = await getCachedMember();
     }
-    _memberPaymentsMade = await LocalDB.getMemberPaymentsMade(memberId);
+    _memberPaymentsMade = await StokvelLocalDB.getMemberPaymentsMade(memberId);
     if (_memberPaymentsMade.isEmpty) {
       return await refreshMemberPaymentsMade(memberId);
     }
@@ -582,7 +584,8 @@ class GenericBloc {
     if (_member == null) {
       _member = await getCachedMember();
     }
-    _memberPaymentsReceived = await LocalDB.getMemberPaymentsReceived(memberId);
+    _memberPaymentsReceived =
+        await StokvelLocalDB.getMemberPaymentsReceived(memberId);
     if (_memberPaymentsReceived.isEmpty) {
       return await refreshMemberPaymentsReceived(memberId);
     }
@@ -599,7 +602,7 @@ class GenericBloc {
     _memberPaymentsMade = await ListAPI.getMemberPaymentsMade(memberId);
     _memberPaymentMadeController.sink.add(_memberPaymentsMade);
     for (var pay in _memberPaymentsMade) {
-      await LocalDB.addMemberPayment(memberPayment: pay);
+      await StokvelLocalDB.addMemberPayment(memberPayment: pay);
     }
     print(
         'GenericBloc:  🔵 🔵 🔵 refreshMemberPaymentsMade, found ${_memberPaymentsMade.length}');
@@ -614,7 +617,7 @@ class GenericBloc {
     _memberPaymentsReceived = await ListAPI.getMemberPaymentsReceived(memberId);
     _memberPaymentReceivedController.sink.add(_memberPaymentsReceived);
     for (var pay in _memberPaymentsReceived) {
-      await LocalDB.addMemberPayment(memberPayment: pay);
+      await StokvelLocalDB.addMemberPayment(memberPayment: pay);
     }
     print(
         'GenericBloc:  🔵 🔵 🔵 refreshMemberPaymentsReceived, found ${_memberPaymentsReceived.length}');
@@ -624,7 +627,7 @@ class GenericBloc {
   Future<List<Stokvel>> getStokvelsAdministered(String memberId) async {
     var stokvels = await ListAPI.getStokvelsAdministered(memberId);
     for (var stk in stokvels) {
-      await LocalDB.addStokvel(stokvel: stk);
+      await StokvelLocalDB.addStokvel(stokvel: stk);
     }
     return stokvels;
   }
@@ -636,7 +639,7 @@ class GenericBloc {
     _stokvels.add(stokvel);
     print('♻️ Add received stokvel to stream');
     _stokvelController.sink.add(_stokvels);
-    LocalDB.addStokvel(stokvel: stokvel);
+    StokvelLocalDB.addStokvel(stokvel: stokvel);
   }
 
   void _processMembers(Map<String, dynamic> message) {
@@ -646,7 +649,7 @@ class GenericBloc {
     _members.add(member);
     print('♻️ Add received member to stream');
     _memberController.sink.add(_members);
-    LocalDB.addMember(member: member);
+    StokvelLocalDB.addMember(member: member);
   }
 
   void _processMemberPayments(Map<String, dynamic> message) {
@@ -663,7 +666,7 @@ class GenericBloc {
       _memberPaymentsMade.add(payment);
       print('♻️ Add received memberPayment to stream');
       _memberPaymentMadeController.sink.add(_memberPaymentsMade);
-      LocalDB.addMemberPayment(memberPayment: payment);
+      StokvelLocalDB.addMemberPayment(memberPayment: payment);
       return;
     } catch (e) {
       print('Something is really weird here ...');
@@ -685,7 +688,7 @@ class GenericBloc {
       _stokvelPayments.add(payment);
       print('♻️ Add received stokvelPayment to stream');
       _stokvelPaymentController.sink.add(_stokvelPayments);
-      LocalDB.addStokvelPayment(stokvelPayment: payment);
+      StokvelLocalDB.addStokvelPayment(stokvelPayment: payment);
     } catch (e) {
       print(e);
     }

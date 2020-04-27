@@ -9,6 +9,19 @@ class RandomImage {
     p('RandomImage constructor 🔆 🔆 🔆 🔆 ');
     _loadImages();
   }
+
+  static List<String> getImageList(int count) {
+    if (count > images.length) {
+      throw Exception("Not enough images to satisfy your needs");
+    }
+    var  list = List<String>();
+    for (var i = 0; i < count; i++) {
+      list.add(images[i]);
+    }
+
+    return list;
+  }
+
   static _loadImages() {
     for (var index = 0; index < 31; index++) {
       images.add('assets/images/m${index + 1}.jpeg');

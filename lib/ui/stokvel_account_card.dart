@@ -41,7 +41,7 @@ class _StokvelAccountCardState extends State<StokvelAccountCard> {
       isBusy = true;
     });
     try {
-      _stokvel = await LocalDB.getStokvelById(widget.stokvelId);
+      _stokvel = await StokvelLocalDB.getStokvelById(widget.stokvelId);
       _accountResponse = await genericBloc.getStokvelAccount(widget.stokvelId);
       if (_accountResponse != null) {
         _buildTable();
@@ -61,7 +61,7 @@ class _StokvelAccountCardState extends State<StokvelAccountCard> {
       isBusy = true;
     });
     try {
-      _stokvel = await LocalDB.getStokvelById(widget.stokvelId);
+      _stokvel = await StokvelLocalDB.getStokvelById(widget.stokvelId);
       if (_stokvel == null) {
         _stokvel = await ListAPI.getStokvelById(widget.stokvelId);
       }

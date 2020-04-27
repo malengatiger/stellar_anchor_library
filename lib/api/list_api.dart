@@ -45,7 +45,7 @@ class ListAPI {
       }
     });
     if (stokvel != null) {
-      await LocalDB.addStokvel(stokvel: stokvel);
+      await StokvelLocalDB.addStokvel(stokvel: stokvel);
     }
     return stokvel;
   }

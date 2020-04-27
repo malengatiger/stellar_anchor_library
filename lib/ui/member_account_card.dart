@@ -47,7 +47,7 @@ class _MemberAccountCardState extends State<MemberAccountCard> {
       isBusy = true;
     });
     try {
-      _member = await LocalDB.getMember(widget.memberId);
+      _member = await StokvelLocalDB.getMember(widget.memberId);
       _accountResponse = await genericBloc.getMemberAccount(widget.memberId);
       if (_accountResponse != null) {
         _buildTable();

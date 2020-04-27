@@ -114,9 +114,9 @@ class MakerBloc {
 
   Future _saveMemberData(StokkieCredential memberCredential, Member member,
       AccountResponseBag memberAccountResponse) async {
-    await LocalDB.addCredential(credential: memberCredential);
-    await LocalDB.addMember(member: member);
-    await LocalDB.addMemberAccountResponse(
+    await StokvelLocalDB.addCredential(credential: memberCredential);
+    await StokvelLocalDB.addMember(member: member);
+    await StokvelLocalDB.addMemberAccountResponse(
         accountResponse: memberAccountResponse.accountResponse);
     Prefs.addMemberAccountResponseBag(memberAccountResponse);
 //    await Prefs.saveCredential(memberCredential);
@@ -252,11 +252,11 @@ class MakerBloc {
       StokkieCredential memberCredential,
       StokkieCredential stokvelCredential,
       AccountResponseBag bag) async {
-    await LocalDB.addMember(member: member);
-    await LocalDB.addStokvel(stokvel: stokvel);
-    await LocalDB.addCredential(credential: memberCredential);
-    await LocalDB.addCredential(credential: stokvelCredential);
-    await LocalDB.addStokvelAccountResponse(
+    await StokvelLocalDB.addMember(member: member);
+    await StokvelLocalDB.addStokvel(stokvel: stokvel);
+    await StokvelLocalDB.addCredential(credential: memberCredential);
+    await StokvelLocalDB.addCredential(credential: stokvelCredential);
+    await StokvelLocalDB.addStokvelAccountResponse(
         accountResponse: bag.accountResponse);
     prettyPrint(member.toJson(),
         '🌽 🌽 🌽 Member about to be cached in Prefs ...🌽 🌽 🌽 check for stokvelIds ...');
@@ -311,11 +311,11 @@ class MakerBloc {
 
   Future _saveStokvelData(StokkieCredential stokvelCredential, Stokvel stokvel,
       AccountResponseBag bag, Member member) async {
-    await LocalDB.addCredential(credential: stokvelCredential);
-    await LocalDB.addStokvel(stokvel: stokvel);
-    await LocalDB.addStokvelAccountResponse(
+    await StokvelLocalDB.addCredential(credential: stokvelCredential);
+    await StokvelLocalDB.addStokvel(stokvel: stokvel);
+    await StokvelLocalDB.addStokvelAccountResponse(
         accountResponse: bag.accountResponse);
-    await LocalDB.addMember(member: member);
+    await StokvelLocalDB.addMember(member: member);
     print(
         '🔵 🔵 🔵 🔵 🔵 🔵 🔵 🔵 🔵 🔵   🍎 Trying to write to Firestore without shitting the bed !   🍎  🔵  🔵  🔵  🔵  🔵  🔵  🔵  🔵 ');
     await writeCredential(stokvelCredential);

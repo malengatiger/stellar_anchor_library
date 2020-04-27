@@ -10,7 +10,7 @@ import 'package:stellarplugin/data_models/account_response.dart';
 
 import 'constants.dart';
 
-class LocalDB {
+class StokvelLocalDB {
   static const APP_ID = 'arAppID';
   static bool dbConnected = false;
   static int cnt = 0;

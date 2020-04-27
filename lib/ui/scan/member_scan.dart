@@ -40,7 +40,7 @@ class _MemberScannerState extends State<MemberScanner> {
   void _getStokkie() async {
     _member = await Prefs.getMember();
     if (widget.stokvelId != null) {
-      _stokvel = await LocalDB.getStokvelById(widget.stokvelId);
+      _stokvel = await StokvelLocalDB.getStokvelById(widget.stokvelId);
     }
     setState(() {});
   }

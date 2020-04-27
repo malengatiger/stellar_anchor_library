@@ -39,13 +39,13 @@ class _SendMoneyState extends State<SendMoney>
       prettyPrint(_member.toJson(),
           '🔵 🔵 🔵 MEMBER doin the paying; check stokvelIds 🔵 🔵 🔵 ');
       if (_member.stokvelIds == null || _member.stokvelIds.isEmpty) {
-        _member = await LocalDB.getMember(_member.memberId);
+        _member = await StokvelLocalDB.getMember(_member.memberId);
       }
       if (_member.stokvelIds == null || _member.stokvelIds.isEmpty) {
         _displayNoStokvelDialog();
       } else {
         for (var id in _member.stokvelIds) {
-          var stokvel = await LocalDB.getStokvelById(id);
+          var stokvel = await StokvelLocalDB.getStokvelById(id);
           _stokvels.add(stokvel);
         }
       }

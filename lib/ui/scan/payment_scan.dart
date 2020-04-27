@@ -105,7 +105,7 @@ class _PaymentScannerState extends State<PaymentScanner> {
 
   void _getStokkie() async {
     if (widget.stokvelId != null) {
-      _stokvel = await LocalDB.getStokvelById(widget.stokvelId);
+      _stokvel = await StokvelLocalDB.getStokvelById(widget.stokvelId);
       setState(() {});
     }
   }
