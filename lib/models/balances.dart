@@ -1,19 +1,16 @@
 import 'balance.dart';
 
 class Balances {
-  /*
-    List<AccountResponse.Balance> balances;
-        String account;
-        private Long sequenceNumber;
-   */
+  String date;
   String account;
-  int sequenceNumber;
+  dynamic sequenceNumber;
   List<Balance> balances;
 
-  Balances(this.account, this.sequenceNumber, this.balances); //
+  Balances({this.account, this.sequenceNumber, this.balances, this.date}); //
 
   Balances.fromJson(Map data) {
     this.account = data['account'];
+    this.date = data['date'];
     this.sequenceNumber = data['sequenceNumber'];
     balances = List();
     if (data['balances'] != null) {
@@ -31,6 +28,7 @@ class Balances {
     });
     Map<String, dynamic> map = Map();
     map['account'] = account;
+    map['date'] = date;
     map['sequenceNumber'] = sequenceNumber;
     map['balances'] = mMap;
     return map;

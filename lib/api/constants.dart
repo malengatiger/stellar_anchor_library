@@ -12,6 +12,7 @@ class Constants {
   // anchor
   static const String AGENTS = 'agents';
   static const String CLIENTS = 'clients';
+  static const String BALANCES = 'balances';
   static const String ANCHOR_PAYMENTS_RECEIVED = 'anchorPaymentsReceived';
   static const String ANCHOR_PAYMENTS_MADE = 'anchorPaymentsMade';
   static const String AGENT_PAYMENTS = 'agentPayments';

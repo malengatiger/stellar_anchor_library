@@ -5,9 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:mobmongo/carrier.dart';
 import 'package:mobmongo/mobmongo.dart';
 import 'package:stellar_anchor_library/models/agent.dart';
+import 'package:stellar_anchor_library/models/balances.dart';
 import 'package:stellar_anchor_library/models/client.dart';
 import 'package:stellar_anchor_library/models/loan.dart';
 import 'package:stellar_anchor_library/util/functions.dart';
+import 'package:stellar_anchor_library/util/util.dart';
 
 import 'constants.dart';
 
@@ -16,7 +18,7 @@ class AnchorLocalDB {
   static bool dbConnected = false;
   static int cnt = 0;
 
-  static String databaseName = 'anchor001';
+  static String databaseName = 'anchor001a';
 
   static Future _connectToLocalDB() async {
     if (dbConnected) {
@@ -93,12 +95,13 @@ class AnchorLocalDB {
     List<Agent> mList = [];
     Carrier carrier = Carrier(
       db: databaseName,
-      collection: Constants.STOKVELS,
+      collection: Constants.AGENTS,
     );
     List result = await MobMongo.getAll(carrier);
     result.forEach((r) {
       mList.add(Agent.fromJson(jsonDecode(r)));
     });
+    p(' 🥬  Agents retrieved from local MongoDB:  🍎 ${mList.length}');
     return mList;
   }
 
@@ -147,7 +150,6 @@ class AnchorLocalDB {
 
   static Future<int> addAgent({@required Agent agent}) async {
     await _connectToLocalDB();
-
     var start = DateTime.now();
     Carrier c = Carrier(db: databaseName, collection: Constants.AGENTS, id: {
       'field': 'agentId',
@@ -165,6 +167,67 @@ class AnchorLocalDB {
     print(
         '🍎 addAgent: 🌼 1 added...: ${agent.personalKYCFields.getFullName()} 🔵 🔵  elapsed: $elapsedSecs milliseconds 🔵 🔵 ');
     return 0;
+  }
+
+  static Future<int> addBalance({@required Balances balances}) async {
+    await _connectToLocalDB();
+    var start = DateTime.now();
+    balances.date = DateTime.now().toIso8601String();
+    Carrier ca = Carrier(
+        db: databaseName,
+        collection: Constants.BALANCES,
+        data: balances.toJson());
+    var res = await MobMongo.insert(ca);
+    print('🦠  Result of Balances insert: 🍎 $res 🍎 ');
+    var end = DateTime.now();
+    var elapsedSecs = end.difference(start).inMilliseconds;
+    print(
+        '🍎 addBalance: 🌼 1 added... 🔵 🔵  elapsed: $elapsedSecs milliseconds 🔵 🔵 ');
+    return 0;
+  }
+
+  static Future<Balances> getLastBalances(String accountId) async {
+    p(' 🔆 🔆 🔆 🔵 AnchorLocalDB: getLastBalances .... $accountId ,,,');
+    List<Balances> mList = await getAllBalances();
+    List<Balances> acctList = [];
+    mList.forEach((element) {
+      if (element.account == accountId) {
+        acctList.add(element);
+      }
+    });
+    p(' 🔆 🔆 🔆 🔵 getLastBalances .... $accountId ... found : ${acctList.length}');
+    if (acctList.isNotEmpty) {
+      acctList.sort((a, b) => b.date.compareTo(a.date));
+      return acctList.last;
+    }
+    return null;
+  }
+
+  static Future<List<Balances>> getAllBalances(
+      {bool descendingOrder = true}) async {
+    await _connectToLocalDB();
+    p(' 🔆 🔆 🔆 🦠🦠🦠🦠🦠 AnchorLocalDB: getAllBalances .... ,,, 1');
+    List<Balances> mList = [];
+    Carrier carrier = Carrier(
+      db: databaseName,
+      collection: Constants.BALANCES,
+    );
+    List result = await MobMongo.getAll(carrier);
+    if (result == null) {
+      return [];
+    }
+    p(' 🔆 🔆 🔆 🦠🦠🦠🦠🦠 AnchorLocalDB: getAllBalances .... ,,, 2');
+    result.forEach((r) {
+      p(r);
+      mList.add(Balances.fromJson(jsonDecode(r)));
+    });
+    if (descendingOrder) {
+      mList.sort((a, b) => b.date.compareTo(a.date));
+    } else {
+      mList.sort((a, b) => a.date.compareTo(b.date));
+    }
+    p(' 🔆 🔆 🔆 🦠🦠🦠🦠🦠 getAllBalances .... found local shit:  🍎 ${mList.length}');
+    return mList;
   }
 
   static Future<int> addClient({@required Client client}) async {
