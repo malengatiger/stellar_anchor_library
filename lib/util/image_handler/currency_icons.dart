@@ -6,7 +6,7 @@ class CurrencyIcons {
         return "${prefix}currency_dollar_green.png";
         break;
       case 'ZAR':
-        return "${prefix}south-africa-rand.png";
+        return "${prefix}zar.png";
         break;
       case 'GBP':
         return "${prefix}currency_blue_pound.png";

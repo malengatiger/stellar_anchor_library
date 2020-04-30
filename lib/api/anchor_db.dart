@@ -113,6 +113,8 @@ class AnchorLocalDB {
         sList.add(m);
       }
     });
+
+    p('AnchorLocalDB: 🦠🦠🦠🦠🦠 getClients found 🔵 ${mList.length}');
     return sList;
   }
 
@@ -127,6 +129,7 @@ class AnchorLocalDB {
     result.forEach((r) {
       mList.add(Client.fromJson(jsonDecode(r)));
     });
+    p('AnchorLocalDB: 🦠🦠🦠🦠🦠  💙 getAllClients found 🔵 ${mList.length} 💙');
     return mList;
   }
 
@@ -218,7 +221,6 @@ class AnchorLocalDB {
     }
     p(' 🔆 🔆 🔆 🦠🦠🦠🦠🦠 AnchorLocalDB: getAllBalances .... ,,, 2');
     result.forEach((r) {
-      p(r);
       mList.add(Balances.fromJson(jsonDecode(r)));
     });
     if (descendingOrder) {
@@ -250,7 +252,7 @@ class AnchorLocalDB {
     var end = DateTime.now();
     var elapsedSecs = end.difference(start).inMilliseconds;
     print(
-        '🍎 addclient: 🌼 1 added...: ${client.personalKYCFields.getFullName()} 🔵 🔵  elapsed: $elapsedSecs milliseconds 🔵 🔵 ');
+        '🍎 addClient: 🌼 1 added...: ${client.personalKYCFields.getFullName()} 🔵 🔵  elapsed: $elapsedSecs milliseconds 🔵 🔵 ');
     return 0;
   }
 

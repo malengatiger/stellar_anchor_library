@@ -26,6 +26,7 @@ class NetUtil {
       print(
           '🔵 🔵 👿 Bad moon rising? :( - 🔵 🔵 👿 bag is null, may not be a problem ');
     }
+    p(mBag);
     var start = DateTime.now();
     http.Response httpResponse = await http
         .post(
