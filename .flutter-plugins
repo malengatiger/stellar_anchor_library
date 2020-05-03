@@ -1,7 +1,7 @@
 # This is a generated file; do not edit or check into version control.
 cloud_firestore=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-0.13.5/
 cloud_firestore_web=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_web-0.1.1+2/
-contacts_service=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/contacts_service-0.4.4/
+contacts_service=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/contacts_service-0.4.6/
 firebase_auth=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-0.16.0/
 firebase_auth_web=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_web-0.1.2/
 firebase_core=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.4.4+3/
@@ -10,7 +10,7 @@ firebase_messaging=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/f
 firebase_storage=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage-3.1.5/
 flutter_email_sender=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_email_sender-3.0.1/
 flutter_plugin_android_lifecycle=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-1.0.7/
-image_picker=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.6.5+2/
+image_picker=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.6.5+3/
 mobmongo=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/mobmongo-0.0.8+1/
 path_provider=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.7/
 path_provider_macos=/Users/aubs/WORK/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-0.0.4+1/

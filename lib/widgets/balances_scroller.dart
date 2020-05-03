@@ -13,6 +13,12 @@ class BalancesScroller extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    balances.balances.forEach((element) {
+      if (element.assetCode == null) {
+        element.assetCode = 'XLM';
+      }
+    });
+    balances.balances.sort((a, b) => a.assetCode.compareTo(b.assetCode));
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView.builder(

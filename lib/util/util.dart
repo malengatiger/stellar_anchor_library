@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -47,8 +49,59 @@ String lorem =
 String dummy =
     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. ";
 
-Color baseColor = Color(0xFFCADCED);
-Color secondaryColor = Colors.brown[100];
+//Color baseColor = Color(0xFFCADCED);
+//Color secondaryColor = Colors.brown[100];
+
+Random _rand = Random(new DateTime.now().millisecondsSinceEpoch);
+Color get baseColor => _getBaseColor();
+Color get secondaryColor => _getSecondaryColor();
+
+/*
+  GOOD COLOR COMBINATIONS
+  Colors.pink[50]  Colors.brown[100];
+  Colors.teal[50] Colors.brown[100];
+  Colors.amber[50] Colors.brown[100];
+  Colors.indigo[50]
+ */
+Color _getBaseColor() {
+  List<Color> colors = List();
+  colors.add(Colors.blue.shade50);
+  colors.add(Colors.grey.shade50);
+  colors.add(Colors.pink.shade50);
+  colors.add(Colors.teal.shade50);
+  colors.add(Colors.red.shade50);
+  colors.add(Colors.green.shade50);
+  colors.add(Colors.amber.shade50);
+  colors.add(Colors.indigo.shade50);
+  colors.add(Colors.lightBlue.shade50);
+  colors.add(Colors.deepPurple.shade50);
+  colors.add(Colors.deepOrange.shade50);
+  colors.add(Colors.brown.shade50);
+  colors.add(Colors.cyan.shade50);
+
+  int index = _rand.nextInt(colors.length - 1);
+//  return Color(0xFFCADCED);
+  return Colors.blueGrey[100];
+}
+
+Color _getSecondaryColor() {
+  List<Color> colors = List();
+  colors.add(Colors.brown.shade100);
+  colors.add(Colors.grey.shade100);
+  colors.add(Colors.pink.shade50);
+  colors.add(Colors.teal.shade100);
+  colors.add(Colors.red.shade100);
+  colors.add(Colors.green.shade100);
+  colors.add(Colors.amber.shade100);
+  colors.add(Colors.indigo.shade100);
+  colors.add(Colors.lime.shade100);
+  colors.add(Colors.deepPurple.shade100);
+  colors.add(Colors.deepOrange.shade100);
+  colors.add(Colors.brown.shade100);
+
+  int index = _rand.nextInt(colors.length - 1);
+  return Colors.brown[50];
+}
 
 List<BoxShadow> customShadow = [
   BoxShadow(

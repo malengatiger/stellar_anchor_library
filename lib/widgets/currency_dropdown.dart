@@ -6,9 +6,14 @@ import 'package:stellar_anchor_library/util/util.dart';
 
 class CurrencyDropDown extends StatelessWidget {
   final Balances balances;
+  final bool showXLM;
   final CurrencyDropDownListener listener;
 
-  const CurrencyDropDown({Key key, this.balances, this.listener})
+  const CurrencyDropDown(
+      {Key key,
+      @required this.balances,
+      @required this.listener,
+      this.showXLM = false})
       : super(key: key);
 
   @override
@@ -19,15 +24,18 @@ class CurrencyDropDown extends StatelessWidget {
       p('🌼 .... Balance to be put into dropDown menu: ${balance.assetCode} ${balance.balance}');
       var imagePath = CurrencyIcons.getCurrencyImagePath(balance.assetCode);
       p('🌼 .... imagePath: $imagePath');
-      if (balance.assetCode != null) {
+      if (balance.assetCode != 'XLM') {
         items.add(new DropdownMenuItem(
             value: balance,
-            child: Row(
-              children: <Widget>[
-                Image.asset(imagePath, height: 40, width: 40),
-                SizedBox(width: 8),
-                Text(balance.assetCode),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: <Widget>[
+                  Image.asset(imagePath, height: 40, width: 40),
+                  SizedBox(width: 8),
+                  Text(balance.assetCode),
+                ],
+              ),
             )));
       }
     });

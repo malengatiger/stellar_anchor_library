@@ -58,6 +58,7 @@ class Prefs {
   }
 
   static Future<Anchor> getAnchor() async {
+    p('🦋 🦋 .................  🌽 🥨 🥨  🌽  getting cached ANCHOR .... 🥨 🥨 ');
     var prefs = await SharedPreferences.getInstance();
     var string = prefs.getString('anchor');
     if (string == null) {
@@ -65,13 +66,15 @@ class Prefs {
     }
     var jx = json.decode(string);
     var name = new Anchor.fromJson(jx);
-    print("🌽 🌽 🌽 Prefs.getAnchor 🧩 ......  ${name.name} retrieved");
+    print(
+        "🌽 🌽 🌽 Prefs.getAnchor 🧩🧩🧩🧩 ......ANCHOR:  🧩 ${name.name} retrieved 🧩");
     return name;
   }
 
   static Future<Agent> getAgent() async {
-    p('getting cached agent ....');
+    p('🦋 🦋 🦋 .................  🌽 🥨 🥨  🌽  getting cached agent .... check next statement ... falling down 🥨 🥨 ');
     var prefs = await SharedPreferences.getInstance();
+    p('.................  🌽  🌽  😡 😡 😡  SharedPreferences instance OK ....');
     var string = prefs.getString('agent');
     if (string == null) {
       p('getting cached agent  😡  FAILED  😡  ....');
@@ -80,7 +83,7 @@ class Prefs {
     var jx = json.decode(string);
     var name = new Agent.fromJson(jx);
     print(
-        "🌽 🌽 🌽 🧡  Prefs.getAgent 🧩 ......AGENT:  ${name.personalKYCFields.getFullName()} retrieved");
+        "🌽 🌽 🌽 🧡  Prefs.getAgent 🧩🧩🧩🧩 ......AGENT:  🧩 ${name.personalKYCFields.getFullName()} retrieved 🧩");
     return name;
   }
 

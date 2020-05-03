@@ -5,9 +5,19 @@ import 'package:stellar_anchor_library/util/util.dart';
 class RoundNumberWidget extends StatelessWidget {
   final int number;
   final double radius, margin;
+  final Color marginColor, mainColor;
+  final TextStyle textStyle;
 
-  const RoundNumberWidget({Key key, @required this.number,  @required this.radius,  @required this.margin})
+  const RoundNumberWidget(
+      {Key key,
+      @required this.number,
+      @required this.radius,
+      @required this.margin,
+      @required this.marginColor,
+      @required this.mainColor,
+      @required this.textStyle})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,7 +25,7 @@ class RoundNumberWidget extends StatelessWidget {
       height: radius + margin,
       decoration: BoxDecoration(
           boxShadow: customShadow,
-          color: secondaryColor,
+          color: marginColor == null ? secondaryColor : marginColor,
           shape: BoxShape.circle),
       child: Center(
         child: Container(
@@ -23,12 +33,12 @@ class RoundNumberWidget extends StatelessWidget {
           height: radius,
           decoration: BoxDecoration(
               boxShadow: customShadow,
-              color: baseColor,
+              color: mainColor == null ? baseColor : mainColor,
               shape: BoxShape.circle),
           child: Center(
             child: Text(
               "$number",
-              style: Styles.blackBoldSmall,
+              style: textStyle == null ? Styles.blackBoldSmall : textStyle,
             ),
           ),
         ),
