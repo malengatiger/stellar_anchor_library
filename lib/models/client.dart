@@ -1,23 +1,9 @@
+import 'package:stellar_anchor_library/util/util.dart';
+
 import 'agent.dart';
 
 class Client {
-  /*
-  private String anchorId,
-            agentId,
-            clientId, startingFiatBalance;
-    private double latitude, longitude;
-    private String dateRegistered,
-            dateUpdated,
-            externalAccountId,
-            account,
-            memo,
-            password,
-            secretSeed;
-
-    private String memo_type;
-    private PersonalKYCFields personalKYCFields;
-   */
-  String anchorId, agentId;
+  String anchorId;
   String clientId, startingFiatBalance;
   double latitude, longitude;
   String dateRegistered,
@@ -27,11 +13,13 @@ class Client {
       fiatLimit,
       password,
       secretSeed;
+  List<String> agentIds;
   PersonalKYCFields personalKYCFields;
+
+  Client.create();
 
   Client(
       this.anchorId,
-      this.agentId,
       this.clientId,
       this.startingFiatBalance,
       this.dateRegistered,
@@ -43,12 +31,12 @@ class Client {
       this.fiatLimit,
       this.password,
       this.secretSeed,
+      this.agentIds,
       this.personalKYCFields); //
   //
 
   Client.fromJson(Map data) {
     this.anchorId = data['anchorId'];
-    this.agentId = data['agentId'];
     this.clientId = data['clientId'];
     this.startingFiatBalance = data['startingFiatBalance'];
     this.dateRegistered = data['dateRegistered'];
@@ -64,12 +52,18 @@ class Client {
       this.personalKYCFields =
           PersonalKYCFields.fromJson(data['personalKYCFields']);
     }
+    this.agentIds = [];
+    if (data['agentIds'] != null) {
+      List mList = data['agentIds'];
+      mList.forEach((m) {
+        this.agentIds.add(m as String);
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = Map();
     map['anchorId'] = anchorId;
-    map['agentId'] = agentId;
     map['clientId'] = clientId;
     map['startingFiatBalance'] = startingFiatBalance;
     map['dateRegistered'] = dateRegistered;
@@ -80,10 +74,57 @@ class Client {
     map['longitude'] = longitude;
 
     map['password'] = password;
+    map['agentIds'] = agentIds;
     map['secretSeed'] = secretSeed;
     map['personalKYCFields'] =
         personalKYCFields == null ? null : personalKYCFields.toJson();
 
     return map;
+  }
+}
+
+class ClientCache {
+  String idFrontPath, date, idBackPath, selfiePath;
+  String proofOfResidencePath;
+  Client client;
+
+  ClientCache(
+      {this.idFrontPath,
+      this.idBackPath,
+      this.date,
+      this.client,
+      this.proofOfResidencePath});
+
+  ClientCache.fromJson(Map map) {
+    try {
+      idFrontPath = map['idFrontPath'];
+      selfiePath = map['selfiePath'];
+      idBackPath = map['idBackPath'];
+      date = map['date'];
+      proofOfResidencePath = map['proofOfResidencePath'];
+      if (map['client'] != null) {
+        p(map['client']);
+        client = Client.fromJson(map['client']);
+      }
+    } catch (e) {
+      print('ClientCache:fromJson: the fuckUp is here somewhere ....');
+      throw Exception('ClientCache: fromJSON 🔴 FuckUp 🔴 $e 🔴');
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    try {
+      Map<String, dynamic> map = {
+        'idFrontPath': idFrontPath,
+        'selfiePath': selfiePath,
+        'idBackPath': idBackPath,
+        'date': date,
+        'proofOfResidencePath': proofOfResidencePath,
+        'client': client == null ? null : client.toJson(),
+      };
+      return map;
+    } catch (e) {
+      throw Exception('ClientCache: toJSON 🔴 FuckUp 🔴 $e 🔴');
+    }
   }
 }

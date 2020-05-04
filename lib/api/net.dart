@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:stellar_anchor_library/util/util.dart';
 
@@ -85,5 +87,48 @@ class NetUtil {
       throw Exception(
           '🚨 🚨 Status Code 🚨 ${httpResponse.statusCode} 🚨 ${httpResponse.body}');
     }
+  }
+
+  static Future uploadIDDocuments(
+      {@required String id,
+      @required File idFront,
+      @required File idBack}) async {
+    var url = await getBaseUrl();
+    var finalUrl = url + 'uploadID';
+    var frontBytes = await idFront.readAsBytes();
+    var backBytes = await idBack.readAsBytes();
+    var req = http.MultipartRequest('POST', Uri.parse(finalUrl))
+      ..fields['id'] = id
+      ..files.add(http.MultipartFile.fromBytes('idFront', frontBytes))
+      ..files.add(http.MultipartFile.fromBytes('idBack', backBytes));
+    var response = await req.send();
+    p('🍐 🍐 🍐 ID uploaded OK : $response');
+    return response;
+  }
+
+  static Future uploadProofOfResidence(
+      {@required String id, @required File proofOfResidence}) async {
+    var url = await getBaseUrl();
+    var finalUrl = url + 'uploadProofOfResidence';
+    var frontBytes = await proofOfResidence.readAsBytes();
+    var req = http.MultipartRequest('POST', Uri.parse(finalUrl))
+      ..fields['id'] = id
+      ..files.add(http.MultipartFile.fromBytes('proofOfResidence', frontBytes));
+    var response = await req.send();
+    p('🥏 🥏 🥏 ProofOfResidence uploaded OK : $response');
+    return response;
+  }
+
+  static Future uploadSelfie(
+      {@required String id, @required File selfie}) async {
+    var url = await getBaseUrl();
+    var finalUrl = url + 'uploadSelfie';
+    var frontBytes = await selfie.readAsBytes();
+    var req = http.MultipartRequest('POST', Uri.parse(finalUrl))
+      ..fields['id'] = id
+      ..files.add(http.MultipartFile.fromBytes('selfie', frontBytes));
+    var response = await req.send();
+    p('🚘  🚘  🚘 Selfie uploaded OK : $response');
+    return response;
   }
 }

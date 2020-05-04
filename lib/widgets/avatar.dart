@@ -5,12 +5,16 @@ class RoundAvatar extends StatelessWidget {
   final String path;
   final double radius;
   final bool fromNetwork;
+  final Color marginColor;
+  final double margin;
 
   const RoundAvatar(
       {Key key,
       @required this.path,
       @required this.radius,
-      @required this.fromNetwork})
+      @required this.fromNetwork,
+      this.margin = 0.0,
+      this.marginColor})
       : super(key: key);
 
   @override
@@ -18,22 +22,42 @@ class RoundAvatar extends StatelessWidget {
     assert(path != null);
     if (fromNetwork) {
       return Container(
-        width: radius,
-        height: radius,
+        height: radius + margin,
+        width: radius + margin,
         decoration: BoxDecoration(
-            boxShadow: customShadow, color: baseColor, shape: BoxShape.circle),
-        child: CircleAvatar(
-          child: Image.asset(path),
+            boxShadow: customShadow,
+            color: marginColor == null ? baseColor : marginColor,
+            shape: BoxShape.circle),
+        child: Container(
+          width: radius,
+          height: radius,
+          decoration: BoxDecoration(
+              boxShadow: customShadow,
+              color: baseColor,
+              shape: BoxShape.circle),
+          child: CircleAvatar(
+            child: Image.asset(path),
+          ),
         ),
       );
     } else {
       return Container(
-        width: radius,
-        height: radius,
+        height: radius + margin,
+        width: radius + margin,
         decoration: BoxDecoration(
-            boxShadow: customShadow, color: baseColor, shape: BoxShape.circle),
-        child: CircleAvatar(
-          backgroundImage: AssetImage(path),
+            boxShadow: customShadow,
+            color: marginColor == null ? baseColor : marginColor,
+            shape: BoxShape.circle),
+        child: Container(
+          width: radius,
+          height: radius,
+          decoration: BoxDecoration(
+              boxShadow: customShadow,
+              color: baseColor,
+              shape: BoxShape.circle),
+          child: CircleAvatar(
+            backgroundImage: AssetImage(path),
+          ),
         ),
       );
     }

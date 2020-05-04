@@ -10,6 +10,7 @@ class Constants {
   static const String STOKVEL_ACCOUNT_RESPONSES = 'stokvelAccountResponses';
 
   // anchor
+  static const String ANCHORS = 'anchors';
   static const String AGENTS = 'agents';
   static const String CLIENTS = 'clients';
   static const String BALANCES = 'balances';

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:stellar_anchor_library/api/constants.dart';
 import 'package:stellar_anchor_library/api/net.dart';
 import 'package:stellar_anchor_library/models/agent.dart';
 import 'package:stellar_anchor_library/models/anchor.dart';
@@ -54,6 +56,35 @@ class AgentBloc {
     _anchor = await Prefs.getAnchor();
     if (_anchor != null) {
       getAgents(_anchor.anchorId);
+    } else {
+      await DotEnv().load(".env");
+      String email = DotEnv().env["email"];
+      String password = DotEnv().env["password"];
+      if (email == null) {
+        throw Exception("admin email not found in .env ");
+      }
+      p('🍐 🍐 🍐 email retrieved from .env  🍐 $email');
+      var authResult = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      if (authResult.user != null) {
+        Anchor anchor;
+        var qs = await firestore
+            .collection(Constants.ANCHORS)
+            .limit(1)
+            .getDocuments();
+        qs.documents.forEach((doc) {
+          anchor = Anchor.fromJson(doc.data);
+        });
+        if (anchor == null) {
+          throw Exception("Unable to find Anchor");
+        }
+        p('🍐 🍐 🍐 Anchor retrieved from Database  🍐 ${anchor.toJson()}');
+        Prefs.saveAnchor(anchor);
+        return anchor;
+      } else {
+        p("👿👿👿👿 Unable to log in the bootUp Admin from .env : $email");
+        throw Exception("👿 Unable to log in the bootUp Admin from .env");
+      }
     }
     return _anchor;
   }

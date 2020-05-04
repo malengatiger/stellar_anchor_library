@@ -88,7 +88,11 @@ class PersonalKYCFields {
 
 //  String id_type, id_country_code, id_issue_date, id_number, language_code, tax_id, tax_id_name;
 //
-//  String photo_proof_residence, photo_id_front, photo_id_back, notary_approval_of_photo_id;
+  String photo_proof_residence,
+      photo_id_front,
+      photo_id_back,
+      notary_approval_of_photo_id,
+      selfie;
 
   PersonalKYCFields.fromJson(Map data) {
     this.lastName = data['last_name'];
@@ -100,6 +104,12 @@ class PersonalKYCFields {
     this.bankNumber = data['bank_number'];
     this.address = data['address'];
     this.bankPhoneNumber = data['bank_phone_number'];
+
+    this.photo_proof_residence = data['photo_proof_residence'];
+    this.photo_id_front = data['photo_id_front'];
+    this.photo_id_back = data['photo_id_back'];
+    this.notary_approval_of_photo_id = data['notary_approval_of_photo_id'];
+    this.selfie = data['selfie'];
   }
 
   Map<String, dynamic> toJson() {
@@ -113,6 +123,12 @@ class PersonalKYCFields {
     map['bank_number'] = bankNumber;
     map['address'] = address;
     map['bank_phone_number'] = bankPhoneNumber;
+
+    map['photo_proof_residence'] = photo_proof_residence;
+    map['photo_id_front'] = photo_id_front;
+    map['photo_id_back'] = photo_id_back;
+    map['notary_approval_of_photo_id'] = notary_approval_of_photo_id;
+    map['selfie'] = selfie;
 
     return map;
   }

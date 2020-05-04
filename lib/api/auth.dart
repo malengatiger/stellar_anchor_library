@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stellar_anchor_library/models/agent.dart';
 import 'package:stellar_anchor_library/models/anchor.dart';
+import 'package:stellar_anchor_library/models/client.dart';
 import 'package:stellar_anchor_library/util/functions.dart';
 import 'package:stellar_anchor_library/util/prefs.dart';
 import 'package:stellar_anchor_library/util/util.dart';
@@ -95,4 +96,49 @@ class Auth {
         "😎 .... returning AGENT: ${agent.personalKYCFields.getFullName()}");
     return agent;
   }
+
+  static Future<Client> signInClient({String email, String password}) async {
+    p('🦕 🦕 ........... Sign in started ......');
+    var result = await _auth.signInWithEmailAndPassword(
+        email: email, password: password);
+    if (result.user == null) {
+      throw Exception("Sign In Failed");
+    }
+    //get client
+    var qs = await _firestore
+        .collection("clients")
+        .limit(1)
+        .where("clientId", isEqualTo: result.user.uid)
+        .getDocuments();
+
+    p('🦕 🦕 Client query executed: ${qs.documents.length} client found ......');
+    Client client;
+    qs.documents.forEach((element) {
+      client = Client.fromJson(element.data);
+    });
+
+    Prefs.saveClient(client);
+    //get anchor
+    qs = await _firestore
+        .collection("anchors")
+        .limit(1)
+        .where("anchorId", isEqualTo: client.anchorId)
+        .getDocuments();
+    p('🦕 🦕 Anchor query executed: ${qs.documents.length} anchor found ......');
+    Anchor anchor;
+    qs.documents.forEach((element) {
+      anchor = Anchor.fromJson(element.data);
+    });
+
+    Prefs.saveAnchor(anchor);
+
+    p('🦕 🦕 😎 😎 😎 Sign in executed OK: anchor saved:  ......');
+    prettyPrint(anchor.toJson(), "😎 ANCHOR cached for later: ${anchor.name} ");
+    p('🦕 🦕 😎 😎 😎 Sign in executed OK: returning client  ......');
+    prettyPrint(client.toJson(),
+        "😎 .... returning AGENT: ${client.personalKYCFields.getFullName()}");
+    return client;
+  }
+
+  static Future registerClient(Client client) async {}
 }

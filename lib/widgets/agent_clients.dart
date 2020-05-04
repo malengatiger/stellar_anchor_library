@@ -98,11 +98,11 @@ class _AgentClientListState extends State<AgentClientList>
             top: 0,
             child: RoundNumberWidget(
               number: clients.length,
-              mainColor: baseColor,
+              mainColor: Colors.teal[200],
               radius: 48,
               margin: 12,
               marginColor: secondaryColor,
-              textStyle: Styles.blackBoldSmall,
+              textStyle: Styles.whiteBoldSmall,
             ),
           )
         ],

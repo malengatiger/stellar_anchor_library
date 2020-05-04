@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stellar_anchor_library/models/agent.dart';
 import 'package:stellar_anchor_library/models/anchor.dart';
+import 'package:stellar_anchor_library/models/client.dart';
 import 'package:stellar_anchor_library/models/stokvel.dart';
 import 'package:stellar_anchor_library/util/util.dart';
 import 'package:stellarplugin/data_models/account_response_bag.dart';
@@ -15,6 +16,27 @@ class Prefs {
     var jx = json.encode(mJson);
     prefs.setString('anchor', jx);
     print("🌽 🌽 🌽 Prefs. ANCHOR  SAVED: 💦  ...... ${anchor.name} 💦 ");
+    return null;
+  }
+
+  static Future saveClient(Client client) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Map mJson = client.toJson();
+    var jx = json.encode(mJson);
+    prefs.setString('client', jx);
+    print(
+        "🌽 🌽 🌽 Prefs. CLIENT  SAVED: 💦  ...... ${client.personalKYCFields.getFullName()} 💦 ");
+    return null;
+  }
+
+  static Future saveClientCache(ClientCache clientCache) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Map mJson = clientCache.toJson();
+    var jx = json.encode(mJson);
+    prefs.setString('clientCache', jx);
+    print("🌽 🌽 🌽 Prefs. CLIENT_CACHE  SAVED: 💦 💦 ");
     return null;
   }
 
@@ -55,6 +77,34 @@ class Prefs {
       print('🔵 🔵 🔵  theme index retrieved: $b 🍏 🍏 ');
       return b;
     }
+  }
+
+  static Future<Client> getClient() async {
+    p('🦋 🦋 .................  🌽 🥨 🥨  🌽  getting cached CLIENT .... 🥨 🥨 ');
+    var prefs = await SharedPreferences.getInstance();
+    var string = prefs.getString('client');
+    if (string == null) {
+      return null;
+    }
+    var jx = json.decode(string);
+    var name = new Client.fromJson(jx);
+    print(
+        "🌽 🌽 🌽 Prefs.getClient 🧩🧩🧩🧩 ......CLIENT:  🧩 ${name.personalKYCFields.getFullName()} retrieved 🧩");
+    return name;
+  }
+
+  static Future<ClientCache> getClientCache() async {
+    p('🦋 🦋 .................  🌽 🥨 🥨  🌽  getting cached CLIENT_CACHE .... 🥨 🥨 ');
+    var prefs = await SharedPreferences.getInstance();
+    var string = prefs.getString('clientCache');
+    if (string == null) {
+      return null;
+    }
+    var jx = json.decode(string);
+    var name = new ClientCache.fromJson(jx);
+    print(
+        "🌽 🌽 🌽 Prefs.getClientCache 🧩🧩🧩🧩 ...... CLIENT_CACHE retrieved 🧩");
+    return name;
   }
 
   static Future<Anchor> getAnchor() async {

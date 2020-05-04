@@ -27,7 +27,7 @@ dependencies:
   cached_network_image: ^2.1.0+1
   stellarplugin: ^0.0.3+12
   flutter_email_sender: ^3.0.1
-  image_picker: ^0.6.5+2
+  image_picker: ^0.6.5+3
   mobmongo: ^0.0.8+1
   contacts_service: ^0.4.4
   mime_type: ^0.3.0
@@ -37,6 +37,7 @@ dependencies:
   permission_handler: ^5.0.0+hotfix.4
   qr_flutter:
   dots_indicator: ^1.1.0
+  camera: ^0.5.7+4
 
 dev_dependencies:
   flutter_test:

@@ -108,10 +108,20 @@ class AnchorLocalDB {
   static Future<List<Client>> getClientsByAgent(String agentId) async {
     List<Client> mList = await getAllClients();
     List<Client> sList = [];
+//    Carrier carrier =
+//    Carrier(db: databaseName, collection: Constants.CLIENTS, query: {
+//      "eq": {"agentIds.stokvelId": stokvelId}
+//    });
+    Carrier carrier = Carrier(
+      db: databaseName,
+      collection: Constants.CLIENTS,
+    );
     mList.forEach((m) {
-      if (m.agentId == agentId) {
-        sList.add(m);
-      }
+      m.agentIds.forEach((id) {
+        if (id == agentId) {
+          sList.add(m);
+        }
+      });
     });
 
     p('AnchorLocalDB: 🦠🦠🦠🦠🦠 getClients found 🔵 ${mList.length}');
