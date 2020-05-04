@@ -11,12 +11,12 @@ import 'package:stellar_anchor_library/util/util.dart';
 import 'mobile_registration.dart';
 
 class ProofOfResidenceUpload extends StatefulWidget {
-  final PageListener pageListener;
-  final Agent agent;
   final Client client;
+  final Agent agent;
+  final PageListener pageListener;
 
   const ProofOfResidenceUpload(
-      {Key key, this.client, this.agent, @required this.pageListener})
+      {Key key, this.client, this.agent, this.pageListener})
       : super(key: key);
   @override
   _ProofOfResidenceUploadState createState() => _ProofOfResidenceUploadState();

@@ -109,11 +109,42 @@ class _RegistrationMobileState extends State<RegistrationMobile>
     return WillPopScope(
       child: Scaffold(
         key: _key,
-        backgroundColor: Colors.pink[100],
+        backgroundColor: baseColor,
         appBar: AppBar(
-          title: Text('Client Registration'),
+          elevation: 0,
+          title: Text(
+            'Client Registration',
+            style: Styles.blackSmall,
+          ),
+          backgroundColor: baseColor,
           bottom: PreferredSize(
-              child: Column(), preferredSize: Size.fromHeight(60)),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      RaisedButton(
+                        color: Colors.teal,
+                        elevation: 8,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            'Submit Registration',
+                            style: Styles.whiteSmall,
+                          ),
+                        ),
+                        onPressed: () {
+                          p('🚺 🚺 🚺 🚺 🚺 🚺 Submit Registration ... check and validate client cache  😡  😡');
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
+              preferredSize: Size.fromHeight(60)),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),

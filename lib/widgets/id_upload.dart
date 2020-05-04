@@ -71,12 +71,23 @@ class _IDUploadState extends State<IDUpload> {
   }
 
   Future _getImageFront() async {
+    p('⭐️ ⭐️ ⭐️ ... Getting front of ID ...');
     _imageFront = await ImagePicker.pickImage(source: ImageSource.camera);
+    if (_imageFront != null) {
+      _clientCache.idFrontPath = _imageFront.path;
+      Prefs.saveClientCache(_clientCache);
+      p('🎁 Front ID image cached');
+    }
     setState(() {});
   }
 
   Future _getImageBack() async {
+    p('⭐️ ⭐️ ⭐️ ... Getting back of ID ...');
     _imageBack = await ImagePicker.pickImage(source: ImageSource.camera);
+    if (_imageBack != null) {
+      _clientCache.idBackPath = _imageBack.path;
+      Prefs.saveClientCache(_clientCache);
+    }
     setState(() {});
   }
 
@@ -115,15 +126,6 @@ class _IDUploadState extends State<IDUpload> {
     });
   }
 
-  _buildNav() {
-    _items.add(BottomNavigationBarItem(
-        icon: Icon(Icons.camera_alt), title: Text('Get Front')));
-    _items.add(BottomNavigationBarItem(
-        icon: Icon(Icons.photo_library), title: Text('Get Back')));
-    _items.add(BottomNavigationBarItem(
-        icon: Icon(Icons.cloud_upload), title: Text('Upload ID')));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -131,14 +133,14 @@ class _IDUploadState extends State<IDUpload> {
         ListView(
           children: <Widget>[
             Container(
-              height: 360,
+              height: 460,
               decoration:
                   BoxDecoration(boxShadow: customShadow, color: secondaryColor),
               child: Container(
                 child: Column(
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(4.0),
                       child: Text(
                         'Front of ID',
                         style: Styles.blackBoldMedium,
@@ -149,17 +151,25 @@ class _IDUploadState extends State<IDUpload> {
                             child: Image.asset('assets/images/id1.jpeg'),
                             opacity: 0.3,
                           )
-                        : Image.file(_imageFront),
+                        : Image.file(
+                            _imageFront,
+                            height: 320,
+                            width: 320,
+                          ),
                     Spacer(),
                     RaisedButton(
                       color: Colors.pink[300],
                       elevation: 4,
-                      child: Text(
-                        'Upload Front of ID',
-                        style: Styles.whiteSmall,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Get Front of ID',
+                          style: Styles.whiteSmall,
+                        ),
                       ),
                       onPressed: () {
-                        p('💙💙💙 Upload front of ID');
+                        p('💙 💙 💙 Get front of ID ... ');
+                        _getImageFront();
                       },
                     ),
                     SizedBox(
@@ -173,14 +183,14 @@ class _IDUploadState extends State<IDUpload> {
               height: 12,
             ),
             Container(
-              height: 360,
+              height: 460,
               decoration:
                   BoxDecoration(boxShadow: customShadow, color: secondaryColor),
               child: Container(
                 child: Column(
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(4.0),
                       child: Text('Back of ID', style: Styles.blackBoldMedium),
                     ),
                     _imageBack == null
@@ -188,17 +198,25 @@ class _IDUploadState extends State<IDUpload> {
                             opacity: 0.3,
                             child: Image.asset('assets/images/id2.png'),
                           )
-                        : Image.file(_imageBack),
+                        : Image.file(
+                            _imageBack,
+                            height: 320,
+                            width: 320,
+                          ),
                     Spacer(),
                     RaisedButton(
                       color: Colors.indigo[300],
                       elevation: 4,
-                      child: Text(
-                        'Upload Back of ID',
-                        style: Styles.whiteSmall,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Get Back of ID',
+                          style: Styles.whiteSmall,
+                        ),
                       ),
                       onPressed: () {
-                        p('💙💙💙 Upload front of ID');
+                        p('💙 💙 💙 Get back of ID ... ');
+                        _getImageBack();
                       },
                     ),
                     SizedBox(

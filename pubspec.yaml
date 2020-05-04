@@ -24,20 +24,21 @@ dependencies:
   animations: 1.0.0+5
   page_transition: ^1.1.5
   google_fonts: ^1.0.0
-  cached_network_image: ^2.1.0+1
+  cached_network_image: ^2.2.0
   stellarplugin: ^0.0.3+12
   flutter_email_sender: ^3.0.1
   image_picker: ^0.6.5+3
   mobmongo: ^0.0.8+1
-  contacts_service: ^0.4.4
+  contacts_service: ^0.4.6
   mime_type: ^0.3.0
   qrscan: ^0.2.17
   circular_profile_avatar: ^1.0.6
   autocomplete_textfield: ^1.7.3
-  permission_handler: ^5.0.0+hotfix.4
+  permission_handler: ^5.0.0+hotfix.5
   qr_flutter:
   dots_indicator: ^1.1.0
   camera: ^0.5.7+4
+  file_picker: ^1.9.0
 
 dev_dependencies:
   flutter_test:
