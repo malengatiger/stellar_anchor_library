@@ -1,6 +1,8 @@
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:stellar_anchor_library/api/auth.dart';
 import 'package:stellar_anchor_library/bloc/agent_bloc.dart';
+import 'package:stellar_anchor_library/models/agent.dart';
 import 'package:stellar_anchor_library/models/anchor.dart';
 import 'package:stellar_anchor_library/models/client.dart';
 import 'package:stellar_anchor_library/util/functions.dart';
@@ -31,15 +33,19 @@ class _RegistrationMobileState extends State<RegistrationMobile>
       idUploaded = false,
       selfieUploaded = false,
       proofOfResidenceUploaded = false;
+  double _dotPosition = 0;
 
   @override
   void initState() {
     super.initState();
+
     _controller.addListener(() {
-      p('PageController event fired.  💙 setting state with page ${_controller.page}');
-      setState(() {
-        currentPageValue = _controller.page;
-      });
+      if (mounted) {
+        setState(() {
+          currentPageValue = _controller.page;
+          _dotPosition = _controller.page.floor() * 1.0;
+        });
+      }
     });
     _getAnchor();
   }
@@ -67,8 +73,8 @@ class _RegistrationMobileState extends State<RegistrationMobile>
   }
 
   _goToNextPage() {
-    p('_goToNextPage using PageController  ');
-    int currentPage = currentPageValue as int;
+    p('🍎 🍎 🍎 🍎 _goToNextPage using PageController  🍎 🍎 🍎 🍎  ........ ');
+    int currentPage = currentPageValue.floor();
     switch (currentPage) {
       case 0:
         _controller.animateToPage(1,
@@ -104,6 +110,69 @@ class _RegistrationMobileState extends State<RegistrationMobile>
     }
   }
 
+  _submit() async {
+    p('🚺 🚺 🚺 🚺 🚺 🚺 Submit client only after validating the input');
+    _clientCache = await Prefs.getClientCache();
+    if (_clientCache.idFrontPath == null || _clientCache.idBackPath == null) {
+      if (currentPageValue != 1.0) {
+        _controller.animateToPage(1,
+            duration: Duration(seconds: 1), curve: Curves.easeInOut);
+      }
+      _errorSnack('ID document not complete');
+      return;
+    } else {
+      p('🥣 🥣 ID Documentation found for submission');
+    }
+    if (_clientCache.selfiePath == null) {
+      if (currentPageValue != 2.0) {
+        _controller.animateToPage(2,
+            duration: Duration(seconds: 1), curve: Curves.easeInOut);
+      }
+      _errorSnack('Selfie is missing');
+      return;
+    } else {
+      p('🥣 🥣 Selfie found for submission');
+    }
+    if (_clientCache.client.password == null) {
+      if (currentPageValue != 0.0) {
+        _controller.animateToPage(0,
+            duration: Duration(seconds: 1), curve: Curves.easeInOut);
+      }
+      _errorSnack('Password is missing');
+      return;
+    } else {
+      p('🥣 🥣 Password found for submission');
+    }
+    if (_clientCache.client.personalKYCFields == null) {
+      if (currentPageValue != 0.0) {
+        _controller.animateToPage(0,
+            duration: Duration(seconds: 1), curve: Curves.easeInOut);
+      }
+      _errorSnack('KYC fields are missing');
+      return;
+    } else {
+      if (_clientCache.client.personalKYCFields.firstName == null ||
+          _clientCache.client.personalKYCFields.lastName == null ||
+          _clientCache.client.personalKYCFields.mobileNumber == null ||
+          _clientCache.client.personalKYCFields.emailAddress == null) {
+        if (currentPageValue != 0.0) {
+          _controller.animateToPage(0,
+              duration: Duration(seconds: 1), curve: Curves.easeInOut);
+        }
+        _errorSnack('Personal fields are missing');
+        return;
+      } else {
+        p('🥣 🥣 Personal KYC fields found for submission');
+      }
+    }
+    _clientCache.client.active = false;
+    p('☘️ everything checks out .... 🥣 🥣 🥣 🥣  CLIENT data is ready for submission via agentBloc');
+  }
+
+  _errorSnack(String message) {
+    AppSnackBar.showErrorSnackBar(scaffoldKey: _key, message: message);
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -112,10 +181,7 @@ class _RegistrationMobileState extends State<RegistrationMobile>
         backgroundColor: baseColor,
         appBar: AppBar(
           elevation: 0,
-          title: Text(
-            'Client Registration',
-            style: Styles.blackSmall,
-          ),
+          leading: Container(),
           backgroundColor: baseColor,
           bottom: PreferredSize(
               child: Column(
@@ -124,7 +190,7 @@ class _RegistrationMobileState extends State<RegistrationMobile>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       RaisedButton(
-                        color: Colors.teal,
+                        color: Colors.teal[300],
                         elevation: 8,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -135,20 +201,29 @@ class _RegistrationMobileState extends State<RegistrationMobile>
                         ),
                         onPressed: () {
                           p('🚺 🚺 🚺 🚺 🚺 🚺 Submit Registration ... check and validate client cache  😡  😡');
+                          _submit();
                         },
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 8,
+                  ),
+                  DotsIndicator(
+                    dotsCount: 4,
+                    position: _dotPosition,
+                  ),
+                  SizedBox(
+                    height: 4,
                   ),
                 ],
               ),
               preferredSize: Size.fromHeight(60)),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
           child: PageView(
+            controller: _controller,
             children: <Widget>[
               RegistrationForm(
                 client: _client,
@@ -209,7 +284,7 @@ class _RegistrationMobileState extends State<RegistrationMobile>
 
   @override
   onNext(String currentPage) {
-    p('🍐  🍐  🍐 onNext ... CurrentPageDesc: $currentPage');
+    p('🍐  🍐  🍐 onNext ... CurrentPageDesc: $currentPage ....');
     _goToNextPage();
   }
 
@@ -235,8 +310,14 @@ class _RegistrationFormState extends State<RegistrationForm>
     with SingleTickerProviderStateMixin {
   TextEditingController emailCntr = TextEditingController();
   TextEditingController pswdCntr = TextEditingController();
+  TextEditingController fNameCntr = TextEditingController();
+  TextEditingController lNameCntr = TextEditingController();
+  TextEditingController cellphoneCntr = TextEditingController();
+
   AnimationController titleController;
   Animation titleAnimation, btnAnimation;
+  ClientCache _clientCache;
+  Client _client;
 
   bool isBusy = false;
   Animation<double> boxAnimation;
@@ -246,10 +327,12 @@ class _RegistrationFormState extends State<RegistrationForm>
   @override
   void initState() {
     super.initState();
-    //todo - remove creds after test
-    emailCntr.text = 'a1588261736345@anchor.com';
-    pswdCntr.text = 'pTiger3#Word!isWannamaker#23';
+    if (widget.client != null) {
+      _client = widget.client;
+    }
+
     _setUpAnimation();
+    _getCache();
   }
 
   _setUpAnimation() {
@@ -274,6 +357,30 @@ class _RegistrationFormState extends State<RegistrationForm>
     titleController.forward();
   }
 
+  _getCache() async {
+    p('_RegistrationFormState: ⭐️⭐️⭐️ Getting cache for old data input ...');
+    _clientCache = await Prefs.getClientCache();
+    if (_clientCache != null) {
+      _client = _clientCache.client;
+      if (_client.personalKYCFields != null) {
+        if (_client.personalKYCFields.emailAddress != null) {
+          emailCntr.text = _client.personalKYCFields.emailAddress;
+        }
+        if (_client.personalKYCFields.firstName != null) {
+          fNameCntr.text = _client.personalKYCFields.firstName;
+        }
+        if (_client.personalKYCFields.lastName != null) {
+          lNameCntr.text = _client.personalKYCFields.lastName;
+        }
+      }
+      if (_client.password != null) {
+        pswdCntr.text = _client.password;
+      }
+      _fillForm();
+    }
+    setState(() {});
+  }
+
   @override
   void dispose() {
     titleController.dispose();
@@ -282,11 +389,33 @@ class _RegistrationFormState extends State<RegistrationForm>
 
   var _key = GlobalKey<ScaffoldState>();
 
-  void _onEmailChanged(String value) {
-    print(value);
+  void _onTextChanged(String value) {
+    p(' 🍎  🍎 some text entered on keyboard ... : $value');
+    if (_client.personalKYCFields == null) {
+      _client.personalKYCFields = PersonalKYCFields.create();
+    }
+    _client.personalKYCFields.firstName = fNameCntr.text;
+    _client.personalKYCFields.lastName = lNameCntr.text;
+    _client.personalKYCFields.emailAddress = emailCntr.text;
+    _client.personalKYCFields.mobileNumber = cellphoneCntr.text;
+    _client.password = pswdCntr.text;
+    _clientCache.client = _client;
+    Prefs.saveClientCache(_clientCache);
   }
 
-  void _signIn() async {
+  void _fillForm() {
+    p(' 🍎  🍎 filling the form from cache ...');
+    if (_client.personalKYCFields != null) {
+      fNameCntr.text = _client.personalKYCFields.firstName;
+      lNameCntr.text = _client.personalKYCFields.lastName;
+      emailCntr.text = _client.personalKYCFields.emailAddress;
+      pswdCntr.text = _client.password;
+      cellphoneCntr.text = _client.personalKYCFields.mobileNumber;
+    }
+    setState(() {});
+  }
+
+  void _startRegistration() async {
     if (emailCntr.text.isEmpty || pswdCntr.text.isEmpty) {
       AppSnackBar.showErrorSnackBar(
           scaffoldKey: _key,
@@ -316,10 +445,6 @@ class _RegistrationFormState extends State<RegistrationForm>
     }
   }
 
-  void _onPasswordChanged(String value) {
-    print(value);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -332,11 +457,11 @@ class _RegistrationFormState extends State<RegistrationForm>
                 elevation: 1,
                 color: baseColor,
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: <Widget>[
                       SizedBox(
-                        height: 40,
+                        height: 2,
                       ),
                       ScaleTransition(
                         scale: titleAnimation,
@@ -352,15 +477,15 @@ class _RegistrationFormState extends State<RegistrationForm>
                                 tag: 'logo',
                                 child: Image.asset(
                                   'assets/logo/logo.png',
-                                  width: 48,
-                                  height: 48,
+                                  width: 32,
+                                  height: 32,
                                 ),
                               ),
                               SizedBox(
                                 width: 20,
                               ),
                               Text(
-                                'Client Sign in',
+                                'Client Registration',
                                 style: Styles.blackBoldMedium,
                               ),
                             ],
@@ -370,12 +495,44 @@ class _RegistrationFormState extends State<RegistrationForm>
                       SizedBox(
                         height: 8,
                       ),
-                      Text(dummy),
+                      TextField(
+                        onChanged: _onTextChanged,
+                        keyboardType: TextInputType.text,
+                        controller: fNameCntr,
+                        style: Styles.blueBoldSmall,
+                        decoration: InputDecoration(
+                            hintText: 'Enter First Name',
+                            labelText: 'First Name'),
+                      ),
                       SizedBox(
-                        height: 40,
+                        height: 4,
                       ),
                       TextField(
-                        onChanged: _onEmailChanged,
+                        onChanged: _onTextChanged,
+                        keyboardType: TextInputType.text,
+                        controller: lNameCntr,
+                        style: Styles.blueBoldSmall,
+                        decoration: InputDecoration(
+                            hintText: 'Enter Last Name',
+                            labelText: 'Last Name'),
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      TextField(
+                        onChanged: _onTextChanged,
+                        keyboardType: TextInputType.phone,
+                        controller: cellphoneCntr,
+                        style: Styles.blackBoldSmall,
+                        decoration: InputDecoration(
+                            hintText: 'Enter Cellphone Number',
+                            labelText: 'Cellphone Number'),
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      TextField(
+                        onChanged: _onTextChanged,
                         keyboardType: TextInputType.emailAddress,
                         controller: emailCntr,
                         style: Styles.blueBoldSmall,
@@ -384,10 +541,10 @@ class _RegistrationFormState extends State<RegistrationForm>
                             labelText: 'Email'),
                       ),
                       SizedBox(
-                        height: 12,
+                        height: 4,
                       ),
                       TextField(
-                        onChanged: _onPasswordChanged,
+                        onChanged: _onTextChanged,
                         keyboardType: TextInputType.text,
                         obscureText: true,
                         controller: pswdCntr,
@@ -395,7 +552,7 @@ class _RegistrationFormState extends State<RegistrationForm>
                             hintText: 'Enter password', labelText: 'Password'),
                       ),
                       SizedBox(
-                        height: 60,
+                        height: 20,
                       ),
                       ScaleTransition(
                         scale: btnAnimation,
@@ -411,18 +568,18 @@ class _RegistrationFormState extends State<RegistrationForm>
                                 )
                               : FlatButton(
                                   onPressed: () {
-                                    p('💙 tapped to go logging in ...');
-                                    _signIn();
+                                    p('💙 tapped to go logging in ... 🥨 🥨 widget.pageListener.onNext to be called ... ');
+                                    widget.pageListener.onNext('clientForm');
                                   },
                                   child: Text(
-                                    "Submit Credentials",
+                                    "Next, or swipe to go",
                                     style: Styles.blackBoldSmall,
                                   ),
                                 ),
                         ),
                       ),
                       SizedBox(
-                        height: 60,
+                        height: 40,
                       ),
                     ],
                   ),

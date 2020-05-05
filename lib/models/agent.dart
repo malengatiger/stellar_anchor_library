@@ -94,6 +94,8 @@ class PersonalKYCFields {
       notary_approval_of_photo_id,
       selfie;
 
+  PersonalKYCFields.create();
+
   PersonalKYCFields.fromJson(Map data) {
     this.lastName = data['last_name'];
     this.firstName = data['first_name'];

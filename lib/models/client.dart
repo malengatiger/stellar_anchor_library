@@ -15,6 +15,7 @@ class Client {
       secretSeed;
   List<String> agentIds;
   PersonalKYCFields personalKYCFields;
+  bool active;
 
   Client.create();
 
@@ -32,6 +33,7 @@ class Client {
       this.password,
       this.secretSeed,
       this.agentIds,
+      this.active,
       this.personalKYCFields); //
   //
 
@@ -45,6 +47,7 @@ class Client {
     this.account = data['account'];
     this.latitude = data['latitude'];
     this.longitude = data['longitude'];
+    this.active = data['active'];
 
     this.password = data['password'];
     this.secretSeed = data['secretSeed'];
@@ -65,6 +68,7 @@ class Client {
     Map<String, dynamic> map = Map();
     map['anchorId'] = anchorId;
     map['clientId'] = clientId;
+    map['active'] = active;
     map['startingFiatBalance'] = startingFiatBalance;
     map['dateRegistered'] = dateRegistered;
     map['dateUpdated'] = dateUpdated;

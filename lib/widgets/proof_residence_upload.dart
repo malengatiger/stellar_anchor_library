@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stellar_anchor_library/api/net.dart';
 import 'package:stellar_anchor_library/models/agent.dart';
 import 'package:stellar_anchor_library/models/client.dart';
 import 'package:stellar_anchor_library/util/functions.dart';
+import 'package:stellar_anchor_library/util/prefs.dart';
 import 'package:stellar_anchor_library/util/util.dart';
 
 import 'mobile_registration.dart';
@@ -28,6 +30,7 @@ class _ProofOfResidenceUploadState extends State<ProofOfResidenceUpload> {
   bool isBusy = false;
   List<BottomNavigationBarItem> _items = [];
   var _key = GlobalKey<ScaffoldState>();
+  ClientCache _clientCache;
 
   @override
   void initState() {
@@ -44,7 +47,7 @@ class _ProofOfResidenceUploadState extends State<ProofOfResidenceUpload> {
           ? null
           : widget.agent.personalKYCFields.getFullName();
     }
-    _buildNav();
+    _getCache();
   }
 
   @override
@@ -52,9 +55,36 @@ class _ProofOfResidenceUploadState extends State<ProofOfResidenceUpload> {
     super.dispose();
   }
 
-  Future _getFile() async {
+  _getCache() async {
+    _clientCache = await Prefs.getClientCache();
+    if (_clientCache != null) {
+      if (_clientCache.proofOfResidencePath != null) {
+        _proofOfResidenceFile = File(_clientCache.proofOfResidencePath);
+      }
+      _id = _clientCache.client.clientId;
+    } else {
+      p('😡 😡 😡 ClientCache not found, this may be a problem. Or not.');
+    }
+    setState(() {});
+  }
+
+  Future _getPDFFile() async {
+    _proofOfResidenceFile = await FilePicker.getFile();
+    if (_proofOfResidenceFile != null) {
+      _clientCache.proofOfResidencePath = _proofOfResidenceFile.path;
+      Prefs.saveClientCache(_clientCache);
+    }
+    setState(() {});
+  }
+
+  Future _takeImageUsingCamera() async {
     _proofOfResidenceFile =
         await ImagePicker.pickImage(source: ImageSource.camera);
+
+    if (_proofOfResidenceFile != null) {
+      _clientCache.proofOfResidencePath = _proofOfResidenceFile.path;
+      Prefs.saveClientCache(_clientCache);
+    }
     setState(() {});
   }
 
@@ -116,7 +146,10 @@ class _ProofOfResidenceUploadState extends State<ProofOfResidenceUpload> {
                       ),
                     ),
                     _proofOfResidenceFile == null
-                        ? Image.asset('assets/images/person1.png')
+                        ? Opacity(
+                            child: Image.asset('assets/images/doc2.png'),
+                            opacity: 0.2,
+                          )
                         : Image.file(_proofOfResidenceFile),
                     Spacer(),
                     RaisedButton(
@@ -150,7 +183,7 @@ class _ProofOfResidenceUploadState extends State<ProofOfResidenceUpload> {
     p('navigation button tapped: $value');
     switch (value) {
       case 0:
-        _getFile();
+        _takeImageUsingCamera();
         break;
       case 1:
         _uploadFile();

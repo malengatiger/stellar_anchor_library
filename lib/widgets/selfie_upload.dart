@@ -148,9 +148,12 @@ class _SelfieUploadState extends State<SelfieUpload> {
                     RaisedButton(
                       color: Colors.pink[300],
                       elevation: 4,
-                      child: Text(
-                        'Open Camera for Selfie',
-                        style: Styles.whiteSmall,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Open Camera for Selfie',
+                          style: Styles.whiteSmall,
+                        ),
                       ),
                       onPressed: () {
                         p('🍎  🍎 🍎  Get Selfie from camera ... ');

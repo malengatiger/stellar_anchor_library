@@ -40,7 +40,7 @@ class _AgentClientListState extends State<AgentClientList>
   }
 
   _getClients() async {
-    clients = await agentBloc.getClients(widget.agent.agentId);
+    clients = await agentBloc.getClients(agentId: widget.agent.agentId);
     imageList = RandomImage.getImageList(clients.length);
     p(' 🔆 🔆 🔆 ${imageList.length} images in the list');
 
