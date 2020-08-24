@@ -19,7 +19,7 @@ class _RoundLogoState extends State<RoundLogo>
   initState() {
     super.initState();
     controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
+        AnimationController(duration: Duration(seconds: 1), vsync: this);
     animation = Tween(begin: 0.0, end: 1.0).animate(controller);
     controller.forward();
   }

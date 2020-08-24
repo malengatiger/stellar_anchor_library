@@ -13,7 +13,7 @@ class ListAPI {
         .getDocuments();
     var mList = List<Stokvel>();
     querySnapshot.documents.forEach((doc) {
-      mList.add(Stokvel.fromJson(doc.data));
+      mList.add(Stokvel.fromJson(doc.data()));
     });
     return mList;
   }
@@ -22,7 +22,7 @@ class ListAPI {
     var querySnapshot = await _firestore.collection('stokvels').getDocuments();
     var mList = List<Stokvel>();
     querySnapshot.documents.forEach((doc) {
-      mList.add(Stokvel.fromJson(doc.data));
+      mList.add(Stokvel.fromJson(doc.data()));
     });
     mList.sort((a, b) => a.name.compareTo(b.name));
     return mList;
@@ -37,7 +37,7 @@ class ListAPI {
     var stokvel;
     ;
     querySnapshot.documents.forEach((doc) {
-      mList.add(Stokvel.fromJson(doc.data));
+      mList.add(Stokvel.fromJson(doc.data()));
     });
     mList.forEach((s) {
       if (s.stokvelId == stokvelId) {
@@ -57,7 +57,7 @@ class ListAPI {
         .getDocuments();
     var mList = List<Invitation>();
     querySnapshot.documents.forEach((doc) {
-      mList.add(Invitation.fromJson(doc.data));
+      mList.add(Invitation.fromJson(doc.data()));
     });
     return mList;
   }
@@ -69,7 +69,7 @@ class ListAPI {
         .getDocuments();
     var mList = List<Member>();
     querySnapshot.documents.forEach((doc) {
-      mList.add(Member.fromJson(doc.data));
+      mList.add(Member.fromJson(doc.data()));
     });
 
     return mList;
@@ -89,7 +89,7 @@ class ListAPI {
         .getDocuments();
     var mList = List<StokkieCredential>();
     querySnapshot.documents.forEach((doc) {
-      mList.add(StokkieCredential.fromJson(doc.data));
+      mList.add(StokkieCredential.fromJson(doc.data()));
     });
     print(
         '🔵 🔵 ListAPI: getStokvelCredential found on Firestore 🔵 ${mList.length} 🔵 creds');
@@ -107,7 +107,7 @@ class ListAPI {
         .getDocuments();
     var mList = List<StokkieCredential>();
     querySnapshot.documents.forEach((doc) {
-      mList.add(StokkieCredential.fromJson(doc.data));
+      mList.add(StokkieCredential.fromJson(doc.data()));
     });
     print(
         '🔵 🔵 ListAPI: getMemberCredential found on Firestore 🔵 ${mList.length} 🔵 creds');
@@ -125,7 +125,7 @@ class ListAPI {
         .getDocuments();
     var mList = List<StokvelGoal>();
     querySnapshot.documents.forEach((doc) {
-      mList.add(StokvelGoal.fromJson(doc.data));
+      mList.add(StokvelGoal.fromJson(doc.data()));
     });
 
     if (mList.isEmpty) {
@@ -142,7 +142,7 @@ class ListAPI {
         .getDocuments();
     var mList = List<StokvelGoal>();
     querySnapshot.documents.forEach((doc) {
-      mList.add(StokvelGoal.fromJson(doc.data));
+      mList.add(StokvelGoal.fromJson(doc.data()));
     });
 
     return mList;
@@ -157,7 +157,7 @@ class ListAPI {
         .getDocuments();
     var mList = List<StokvelPayment>();
     querySnapshot.documents.forEach((doc) {
-      mList.add(StokvelPayment.fromJson(doc.data));
+      mList.add(StokvelPayment.fromJson(doc.data()));
     });
 
     return mList;
@@ -173,7 +173,7 @@ class ListAPI {
         .getDocuments();
     var mList = List<MemberPayment>();
     querySnapshot.documents.forEach((doc) {
-      mList.add(MemberPayment.fromJson(doc.data));
+      mList.add(MemberPayment.fromJson(doc.data()));
     });
     return mList;
   }
@@ -188,7 +188,7 @@ class ListAPI {
         .getDocuments();
     var mList = List<MemberPayment>();
     querySnapshot.documents.forEach((doc) {
-      mList.add(MemberPayment.fromJson(doc.data));
+      mList.add(MemberPayment.fromJson(doc.data()));
     });
     return mList;
   }
@@ -202,7 +202,7 @@ class ListAPI {
 
     var mList = List<Member>();
     querySnapshot.documents.forEach((doc) {
-      mList.add(Member.fromJson(doc.data));
+      mList.add(Member.fromJson(doc.data()));
     });
 
     if (mList.isNotEmpty) {

@@ -110,7 +110,7 @@ class StokvelDataAPI {
         .where('memberId', isEqualTo: memberId)
         .getDocuments();
     if (querySnapshot.documents.isNotEmpty) {
-      var member = Member.fromJson(querySnapshot.documents.first.data);
+      var member = Member.fromJson(querySnapshot.documents.first.data());
       if (member.stokvelIds == null) {
         member.stokvelIds = List();
       }
@@ -133,7 +133,7 @@ class StokvelDataAPI {
         .where('stokvelId', isEqualTo: stokvelId)
         .getDocuments();
     if (querySnapshot.documents.isNotEmpty) {
-      var stokvel = Stokvel.fromJson(querySnapshot.documents.first.data);
+      var stokvel = Stokvel.fromJson(querySnapshot.documents.first.data());
       stokvel.adminMember = member;
       stokvel.date = DateTime.now().toUtc().toIso8601String();
       querySnapshot.documents.first.reference.updateData(stokvel.toJson());

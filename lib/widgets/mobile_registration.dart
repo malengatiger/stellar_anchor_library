@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:stellar_anchor_library/api/auth.dart';
+import 'package:stellar_anchor_library/api/net.dart';
 import 'package:stellar_anchor_library/bloc/agent_bloc.dart';
 import 'package:stellar_anchor_library/models/agent.dart';
 import 'package:stellar_anchor_library/models/anchor.dart';
@@ -166,7 +168,38 @@ class _RegistrationMobileState extends State<RegistrationMobile>
       }
     }
     _clientCache.client.active = false;
-    p('☘️ everything checks out .... 🥣 🥣 🥣 🥣  CLIENT data is ready for submission via agentBloc');
+    p('☘️ everything checks out .... 🥣 🥣 🥣 🥣  CLIENT data is ready for submission ...');
+    p(' 🔆 Check all fields from ClientCache: 🧩🧩🧩 ${_clientCache.toJson()}');
+    try {
+      p(' 🔆 RegistrationMobile: starting ID upload ..');
+      var idResult = await NetUtil.uploadIDDocuments(
+          id: _clientCache.client.clientId,
+          idFront: File(_clientCache.idFrontPath),
+          idBack: File(_clientCache.idBackPath));
+
+      p(' 🔆 RegistrationMobile: starting selfie upload ..');
+      var selfieResult = await NetUtil.uploadSelfie(
+          id: _clientCache.client.clientId,
+          selfie: File(_clientCache.selfiePath));
+
+      p(' 🔆 RegistrationMobile: starting actual registration ..');
+      var mResult = await NetUtil.post(
+          headers: null,
+          apiRoute: 'registerClient',
+          bag: _clientCache.client.toJson());
+
+      p(idResult);
+      p(selfieResult);
+      p(mResult);
+      AppSnackBar.showSnackBar(
+          scaffoldKey: _key,
+          message: 'Client registered successfully',
+          textColor: Colors.lightBlue,
+          backgroundColor: Colors.black);
+    } catch (e) {
+      p(e);
+      _errorSnack(e.message == null ? 'Registration Failed' : e.message);
+    }
   }
 
   _errorSnack(String message) {
@@ -362,20 +395,6 @@ class _RegistrationFormState extends State<RegistrationForm>
     _clientCache = await Prefs.getClientCache();
     if (_clientCache != null) {
       _client = _clientCache.client;
-      if (_client.personalKYCFields != null) {
-        if (_client.personalKYCFields.emailAddress != null) {
-          emailCntr.text = _client.personalKYCFields.emailAddress;
-        }
-        if (_client.personalKYCFields.firstName != null) {
-          fNameCntr.text = _client.personalKYCFields.firstName;
-        }
-        if (_client.personalKYCFields.lastName != null) {
-          lNameCntr.text = _client.personalKYCFields.lastName;
-        }
-      }
-      if (_client.password != null) {
-        pswdCntr.text = _client.password;
-      }
       _fillForm();
     }
     setState(() {});
@@ -406,42 +425,18 @@ class _RegistrationFormState extends State<RegistrationForm>
   void _fillForm() {
     p(' 🍎  🍎 filling the form from cache ...');
     if (_client.personalKYCFields != null) {
-      fNameCntr.text = _client.personalKYCFields.firstName;
-      lNameCntr.text = _client.personalKYCFields.lastName;
-      emailCntr.text = _client.personalKYCFields.emailAddress;
+      if (_client.personalKYCFields.emailAddress != null) {
+        emailCntr.text = _client.personalKYCFields.emailAddress;
+      }
+      if (_client.personalKYCFields.firstName != null) {
+        fNameCntr.text = _client.personalKYCFields.firstName;
+      }
+      if (_client.personalKYCFields.lastName != null) {
+        lNameCntr.text = _client.personalKYCFields.lastName;
+      }
+    }
+    if (_client.password != null) {
       pswdCntr.text = _client.password;
-      cellphoneCntr.text = _client.personalKYCFields.mobileNumber;
-    }
-    setState(() {});
-  }
-
-  void _startRegistration() async {
-    if (emailCntr.text.isEmpty || pswdCntr.text.isEmpty) {
-      AppSnackBar.showErrorSnackBar(
-          scaffoldKey: _key,
-          message: "Credentials missing or invalid",
-          actionLabel: 'Error');
-      return;
-    }
-    setState(() {
-      isBusy = true;
-    });
-    try {
-      p('............ Signing in by calling Auth signIn ...');
-      var agent = await Auth.signInAgent(
-          email: emailCntr.text, password: pswdCntr.text);
-      print(
-          '🍎 🍎  🍎  🍎 ️signed in ok, ✳️ popping TO dashboard..... AGENT: ${agent.toJson()}');
-      Navigator.pop(context, true);
-    } catch (e) {
-      print(e);
-      setState(() {
-        isBusy = false;
-      });
-      AppSnackBar.showErrorSnackBar(
-          scaffoldKey: _key,
-          message: 'We have a problem $e',
-          actionLabel: 'Err');
     }
   }
 

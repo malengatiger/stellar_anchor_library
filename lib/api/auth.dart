@@ -12,7 +12,7 @@ class Auth {
   static var _firestore = Firestore.instance;
 
   static Future<bool> checkAuthenticated() async {
-    var user = await _auth.currentUser();
+    var user = _auth.currentUser;
     if (user == null) {
       return false;
     } else {
@@ -36,7 +36,7 @@ class Auth {
 
     AnchorUser user;
     qs.documents.forEach((element) {
-      user = AnchorUser.fromJson(element.data);
+      user = AnchorUser.fromJson(element.data());
     });
     Prefs.saveAnchorUser(user);
     //get anchorUser
@@ -48,7 +48,7 @@ class Auth {
 
     Anchor anchor;
     qs.documents.forEach((element) {
-      anchor = Anchor.fromJson(element.data);
+      anchor = Anchor.fromJson(element.data());
     });
     Prefs.saveAnchor(anchor);
     return user;
@@ -71,7 +71,7 @@ class Auth {
     p('🦕 🦕 Agent query executed: ${qs.documents.length} agent found ......');
     Agent agent;
     qs.documents.forEach((element) {
-      agent = Agent.fromJson(element.data);
+      agent = Agent.fromJson(element.data());
     });
 
     Prefs.saveAgent(agent);
@@ -84,7 +84,7 @@ class Auth {
     p('🦕 🦕 Anchor query executed: ${qs.documents.length} anchor found ......');
     Anchor anchor;
     qs.documents.forEach((element) {
-      anchor = Anchor.fromJson(element.data);
+      anchor = Anchor.fromJson(element.data());
     });
 
     Prefs.saveAnchor(anchor);
@@ -114,7 +114,7 @@ class Auth {
     p('🦕 🦕 Client query executed: ${qs.documents.length} client found ......');
     Client client;
     qs.documents.forEach((element) {
-      client = Client.fromJson(element.data);
+      client = Client.fromJson(element.data());
     });
 
     Prefs.saveClient(client);
@@ -127,7 +127,7 @@ class Auth {
     p('🦕 🦕 Anchor query executed: ${qs.documents.length} anchor found ......');
     Anchor anchor;
     qs.documents.forEach((element) {
-      anchor = Anchor.fromJson(element.data);
+      anchor = Anchor.fromJson(element.data());
     });
 
     Prefs.saveAnchor(anchor);

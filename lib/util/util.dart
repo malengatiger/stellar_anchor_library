@@ -1,7 +1,10 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:stellar_anchor_library/models/anchor.dart';
 
 Future<String> getBaseUrl() async {
   await DotEnv().load('.env');
@@ -17,6 +20,142 @@ Future<String> getBaseUrl() async {
   } else {
     return prodURL;
   }
+}
+
+Future<String> getOwzoUrl() async {
+  await DotEnv().load('.env');
+  String owzoURL = DotEnv().env['owzo.url'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 owzoURL: $owzoURL 🔵 🔵 🔵 ');
+  return owzoURL;
+}
+
+Future<String> getCountryCode() async {
+  await DotEnv().load('.env');
+  String countryCode = DotEnv().env['owzo.countryCode'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 countryCode: $countryCode 🔵 🔵 🔵 ');
+  return countryCode;
+}
+
+Future<String> getOwzoPrivateKey() async {
+  await DotEnv().load('.env');
+  String privateKey = DotEnv().env['owzo.privateKey'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 privateKey: $privateKey 🔵 🔵 🔵 ');
+  return privateKey;
+}
+
+Future<String> getOwzoApiKey() async {
+  await DotEnv().load('.env');
+  String apiKey = DotEnv().env['owzo.apiKey'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 apiKey: $apiKey 🔵 🔵 🔵 ');
+  return apiKey;
+}
+
+Future<String> getOwzoSuccessUrl() async {
+  await DotEnv().load('.env');
+  String url = DotEnv().env['owzo.successUrl'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 url: $url 🔵 🔵 🔵 ');
+  return url;
+}
+
+Future<String> getOwzoErrorUrl() async {
+  await DotEnv().load('.env');
+  String url = DotEnv().env['owzo.errorUrl'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 url: $url 🔵 🔵 🔵 ');
+  return url;
+}
+
+Future<String> getOwzoCancelUrl() async {
+  await DotEnv().load('.env');
+  String url = DotEnv().env['owzo.cancelUrl'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 url: $url 🔵 🔵 🔵 ');
+  return url;
+}
+
+Future<String> getOwzoSiteCode() async {
+  await DotEnv().load('.env');
+  String siteCode = DotEnv().env['owzo.siteCode'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 siteCode: $siteCode 🔵 🔵 🔵 ');
+  return siteCode;
+}
+
+Future<String> getOwzoNotifyUrl() async {
+  await DotEnv().load('.env');
+  String url = DotEnv().env['owzo.notifyUrl'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 url: $url 🔵 🔵 🔵 ');
+  return url;
+}
+
+Future<String> getCurrencyCode() async {
+  await DotEnv().load('.env');
+  String currencyCode = DotEnv().env['owzo.currencyCode'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 currencyCode: $currencyCode 🔵 🔵 🔵 ');
+  return currencyCode;
+}
+
+Future<String> getPayfastPassPhrase() async {
+  await DotEnv().load('.env');
+  String passPhrase = DotEnv().env['payfast.passPhrase'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 payfast passPhrase: $passPhrase 🔵 🔵 🔵 ');
+  return passPhrase;
+}
+
+Future<String> getPayfastMerchantId() async {
+  await DotEnv().load('.env');
+  String merchantId = DotEnv().env['payfast.merchantId'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 payfast merchantId: $merchantId 🔵 🔵 🔵 ');
+  return merchantId;
+}
+
+Future<String> getPayfastMerchantKey() async {
+  await DotEnv().load('.env');
+  String merchantKey = DotEnv().env['payfast.merchantKey'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 payfast merchantKey: $merchantKey 🔵 🔵 🔵 ');
+  return merchantKey;
+}
+
+Future<String> getPayfastReturnUrl() async {
+  await DotEnv().load('.env');
+  String returnUrl = DotEnv().env['payfast.returnUrl'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 payfast returnUrl: $returnUrl 🔵 🔵 🔵 ');
+  return returnUrl;
+}
+
+Future<String> getPayfastNotifyUrl() async {
+  await DotEnv().load('.env');
+  String notifyUrl = DotEnv().env['payfast.notifyUrl'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 payfast notifyUrl: $notifyUrl 🔵 🔵 🔵 ');
+  return notifyUrl;
+}
+
+Future<String> getPayfastCancelUrl() async {
+  await DotEnv().load('.env');
+  String cancelUrl = DotEnv().env['payfast.cancelUrl'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 payfast cancelUrl: $cancelUrl 🔵 🔵 🔵 ');
+  return cancelUrl;
+}
+
+Future<String> getPayfastUrl() async {
+  await DotEnv().load('.env');
+  String url = DotEnv().env['payfast.url'];
+
+  p('🔵 🔵 Properties Data from dot.env file; 🔆 payfast url: $url 🔵 🔵 🔵 ');
+  return url;
 }
 
 Future<bool> isProductionMode() async {
@@ -36,11 +175,26 @@ Future<bool> isProductionMode() async {
   }
 }
 
+bool firebaseInitialized = false;
+FirebaseFirestore _firestore;
 Future<String> getAnchorId() async {
-  await DotEnv().load('.env');
-  String anchorId = DotEnv().env['anchorId'];
-  p('🔵 🔵 Properties Data from dot.env file; 🔆 anchorName: $anchorId 🔵 🔆  🔵 🔵 ');
-  return anchorId;
+//  await DotEnv().load('.env');
+//  String anchorId = DotEnv().env['anchorId'];
+//
+//
+  if (!firebaseInitialized) {
+    await Firebase.initializeApp();
+    p('🔵 🔵 🔵 🔵 🔵 🔵 🔵 🔵 Firebase has been initialized 🍎');
+    _firestore = Firestore.instance;
+    firebaseInitialized = true;
+  }
+  var qs = await _firestore.collection('anchors').get();
+  if (qs.docs.isEmpty) {
+    throw Exception('Anchor not found');
+  }
+  var anchor = Anchor.fromJson(qs.docs.first.data());
+  p('🔵 🔵 Anchor found on Firestore; 🔆 anchor: ${anchor.toJson()} 🔵 🔆  🔵 🔵 ');
+  return anchor.anchorId;
 }
 
 String lorem =

@@ -72,8 +72,15 @@ class _IDUploadState extends State<IDUpload> {
 
   Future _getImageFront() async {
     p('⭐️ ⭐️ ⭐️ ... Getting front of ID ...');
-    _imageFront = await ImagePicker.pickImage(source: ImageSource.camera);
+    _imageFront = await ImagePicker.pickImage(
+        source: ImageSource.camera,
+        maxHeight: 400,
+        maxWidth: 400,
+        imageQuality: 100);
+
     if (_imageFront != null) {
+      var len = await _imageFront.length();
+      p('🍎 idFront file size: $len bytes; 🧩 Must not exceed maximum permitted size of 1,048,576 bytes (1 MB).');
       _clientCache.idFrontPath = _imageFront.path;
       Prefs.saveClientCache(_clientCache);
       p('🎁 Front ID image cached');
@@ -83,8 +90,14 @@ class _IDUploadState extends State<IDUpload> {
 
   Future _getImageBack() async {
     p('⭐️ ⭐️ ⭐️ ... Getting back of ID ...');
-    _imageBack = await ImagePicker.pickImage(source: ImageSource.camera);
+    _imageBack = await ImagePicker.pickImage(
+        source: ImageSource.camera,
+        maxHeight: 400,
+        maxWidth: 400,
+        imageQuality: 100);
     if (_imageBack != null) {
+      var len = await _imageBack.length();
+      p('🍎 idBack file size: $len bytes; 🧩 Must not exceed maximum permitted size of 1,048,576 bytes (1 MB).');
       _clientCache.idBackPath = _imageBack.path;
       Prefs.saveClientCache(_clientCache);
     }

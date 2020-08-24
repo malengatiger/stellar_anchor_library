@@ -130,7 +130,7 @@ class AgentBloc {
 
     _agents.clear();
     qs.documents.forEach((doc) {
-      _agents.add(Agent.fromJson(doc.data));
+      _agents.add(Agent.fromJson(doc.data()));
     });
     _agents.forEach((element) async {
       await AnchorLocalDB.addAgent(agent: element);
@@ -167,7 +167,7 @@ class AgentBloc {
         .getDocuments();
     _clients.clear();
     qs.documents.forEach((doc) {
-      _clients.add(Client.fromJson(doc.data));
+      _clients.add(Client.fromJson(doc.data()));
     });
     _busies.clear();
     _busies.add(false);

@@ -56,6 +56,10 @@ class _SelfieUploadState extends State<SelfieUpload> {
     if (_clientCache != null) {
       if (_clientCache.selfiePath != null) {
         _selfieFile = File(_clientCache.selfiePath);
+        if (_selfieFile != null) {
+          _clientCache.idBackPath = _selfieFile.path;
+          Prefs.saveClientCache(_clientCache);
+        }
       }
       _id = _clientCache.client.clientId;
     } else {
@@ -70,11 +74,19 @@ class _SelfieUploadState extends State<SelfieUpload> {
   }
 
   Future _getSelfie() async {
-    _selfieFile = await ImagePicker.pickImage(source: ImageSource.camera);
-    setState(() {});
-    _clientCache.selfiePath = _selfieFile.path;
-    Prefs.saveClientCache(_clientCache);
-    p('🚺 🚺 🚺 SelfieUpload - 💚 looks like the job is done. selfiePath saved');
+    _selfieFile = await ImagePicker.pickImage(
+        source: ImageSource.camera,
+        maxHeight: 400,
+        maxWidth: 400,
+        imageQuality: 100);
+    if (_selfieFile != null) {
+      var len = await _selfieFile.length();
+      p('🍎 idBack file size: $len bytes; 🧩 Must not exceed maximum permitted size of 1,048,576 bytes (1 MB).');
+      _clientCache.selfiePath = _selfieFile.path;
+      Prefs.saveClientCache(_clientCache);
+      setState(() {});
+      p('🚺 🚺 🚺 SelfieUpload - 💚 looks like the job is done. selfiePath saved');
+    }
   }
 
   Future _uploadSelfie() async {
